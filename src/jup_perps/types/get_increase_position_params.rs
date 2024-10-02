@@ -5,7 +5,7 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
-use crate::generated::types::Side;
+use crate::jup_perps::types::Side;
 use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
 

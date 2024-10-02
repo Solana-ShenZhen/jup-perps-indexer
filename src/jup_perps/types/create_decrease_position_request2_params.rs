@@ -5,7 +5,7 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
-use crate::generated::types::RequestType;
+use crate::jup_perps::types::RequestType;
 use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
 

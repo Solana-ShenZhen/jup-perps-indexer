@@ -5,420 +5,496 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
+use crate::jup_perps::types::DecreasePositionPostSwapParams;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
-use crate::generated::types::DecreasePositionPostSwapParams;
+use crate::jup_perps::programs::PERPETUALS_ID;
 
 /// Accounts.
 pub struct DecreasePositionPostSwap {
-      
-              
-          pub keeper: solana_program::pubkey::Pubkey,
-          
-              
-          pub position_request: solana_program::pubkey::Pubkey,
-          
-              
-          pub position_request_ata: solana_program::pubkey::Pubkey,
-          
-              
-          pub event_authority: solana_program::pubkey::Pubkey,
-          
-              
-          pub program: solana_program::pubkey::Pubkey,
-      }
+    pub keeper: solana_program::pubkey::Pubkey,
+
+    pub position_request: solana_program::pubkey::Pubkey,
+
+    pub position_request_ata: solana_program::pubkey::Pubkey,
+
+    pub event_authority: solana_program::pubkey::Pubkey,
+
+    pub program: solana_program::pubkey::Pubkey,
+}
 
 impl DecreasePositionPostSwap {
-  pub fn instruction(&self, args: DecreasePositionPostSwapInstructionArgs) -> solana_program::instruction::Instruction {
-    self.instruction_with_remaining_accounts(args, &[])
-  }
-  #[allow(clippy::vec_init_then_push)]
-  pub fn instruction_with_remaining_accounts(&self, args: DecreasePositionPostSwapInstructionArgs, remaining_accounts: &[solana_program::instruction::AccountMeta]) -> solana_program::instruction::Instruction {
-    let mut accounts = Vec::with_capacity(5 + remaining_accounts.len());
-                            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            self.keeper,
-            true
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            self.position_request,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            self.position_request_ata,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            self.event_authority,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            self.program,
-            false
-          ));
-                      accounts.extend_from_slice(remaining_accounts);
-    let mut data = DecreasePositionPostSwapInstructionData::new().try_to_vec().unwrap();
-          let mut args = args.try_to_vec().unwrap();
-      data.append(&mut args);
-    
-    solana_program::instruction::Instruction {
-      program_id: crate::PERPETUALS_ID,
-      accounts,
-      data,
+    pub fn instruction(
+        &self,
+        args: DecreasePositionPostSwapInstructionArgs,
+    ) -> solana_program::instruction::Instruction {
+        self.instruction_with_remaining_accounts(args, &[])
     }
-  }
+    #[allow(clippy::vec_init_then_push)]
+    pub fn instruction_with_remaining_accounts(
+        &self,
+        args: DecreasePositionPostSwapInstructionArgs,
+        remaining_accounts: &[solana_program::instruction::AccountMeta],
+    ) -> solana_program::instruction::Instruction {
+        let mut accounts = Vec::with_capacity(5 + remaining_accounts.len());
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            self.keeper,
+            true,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            self.position_request,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            self.position_request_ata,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            self.event_authority,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            self.program,
+            false,
+        ));
+        accounts.extend_from_slice(remaining_accounts);
+        let mut data = DecreasePositionPostSwapInstructionData::new()
+            .try_to_vec()
+            .unwrap();
+        let mut args = args.try_to_vec().unwrap();
+        data.append(&mut args);
+
+        solana_program::instruction::Instruction {
+            program_id: PERPETUALS_ID,
+            accounts,
+            data,
+        }
+    }
 }
 
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct DecreasePositionPostSwapInstructionData {
-            discriminator: [u8; 8],
-            }
+    discriminator: [u8; 8],
+}
 
 impl DecreasePositionPostSwapInstructionData {
-  pub fn new() -> Self {
-    Self {
-                        discriminator: [75, 246, 208, 7, 203, 66, 106, 91],
-                                }
-  }
+    pub fn new() -> Self {
+        Self {
+            discriminator: [75, 246, 208, 7, 203, 66, 106, 91],
+        }
+    }
 }
 
 impl Default for DecreasePositionPostSwapInstructionData {
-  fn default() -> Self {
-    Self::new()
-  }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct DecreasePositionPostSwapInstructionArgs {
-                  pub params: DecreasePositionPostSwapParams,
-      }
-
+    pub params: DecreasePositionPostSwapParams,
+}
 
 /// Instruction builder for `DecreasePositionPostSwap`.
 ///
 /// ### Accounts:
 ///
-                ///   0. `[signer]` keeper
-          ///   1. `[]` position_request
-          ///   2. `[]` position_request_ata
-          ///   3. `[]` event_authority
-          ///   4. `[]` program
+///   0. `[signer]` keeper
+///   1. `[]` position_request
+///   2. `[]` position_request_ata
+///   3. `[]` event_authority
+///   4. `[]` program
 #[derive(Clone, Debug, Default)]
 pub struct DecreasePositionPostSwapBuilder {
-            keeper: Option<solana_program::pubkey::Pubkey>,
-                position_request: Option<solana_program::pubkey::Pubkey>,
-                position_request_ata: Option<solana_program::pubkey::Pubkey>,
-                event_authority: Option<solana_program::pubkey::Pubkey>,
-                program: Option<solana_program::pubkey::Pubkey>,
-                        params: Option<DecreasePositionPostSwapParams>,
-        __remaining_accounts: Vec<solana_program::instruction::AccountMeta>,
+    keeper: Option<solana_program::pubkey::Pubkey>,
+    position_request: Option<solana_program::pubkey::Pubkey>,
+    position_request_ata: Option<solana_program::pubkey::Pubkey>,
+    event_authority: Option<solana_program::pubkey::Pubkey>,
+    program: Option<solana_program::pubkey::Pubkey>,
+    params: Option<DecreasePositionPostSwapParams>,
+    __remaining_accounts: Vec<solana_program::instruction::AccountMeta>,
 }
 
 impl DecreasePositionPostSwapBuilder {
-  pub fn new() -> Self {
-    Self::default()
-  }
-            #[inline(always)]
+    pub fn new() -> Self {
+        Self::default()
+    }
+    #[inline(always)]
     pub fn keeper(&mut self, keeper: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.keeper = Some(keeper);
-                    self
+        self.keeper = Some(keeper);
+        self
     }
-            #[inline(always)]
-    pub fn position_request(&mut self, position_request: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.position_request = Some(position_request);
-                    self
+    #[inline(always)]
+    pub fn position_request(
+        &mut self,
+        position_request: solana_program::pubkey::Pubkey,
+    ) -> &mut Self {
+        self.position_request = Some(position_request);
+        self
     }
-            #[inline(always)]
-    pub fn position_request_ata(&mut self, position_request_ata: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.position_request_ata = Some(position_request_ata);
-                    self
+    #[inline(always)]
+    pub fn position_request_ata(
+        &mut self,
+        position_request_ata: solana_program::pubkey::Pubkey,
+    ) -> &mut Self {
+        self.position_request_ata = Some(position_request_ata);
+        self
     }
-            #[inline(always)]
-    pub fn event_authority(&mut self, event_authority: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.event_authority = Some(event_authority);
-                    self
+    #[inline(always)]
+    pub fn event_authority(
+        &mut self,
+        event_authority: solana_program::pubkey::Pubkey,
+    ) -> &mut Self {
+        self.event_authority = Some(event_authority);
+        self
     }
-            #[inline(always)]
+    #[inline(always)]
     pub fn program(&mut self, program: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.program = Some(program);
-                    self
+        self.program = Some(program);
+        self
     }
-                    #[inline(always)]
-      pub fn params(&mut self, params: DecreasePositionPostSwapParams) -> &mut Self {
+    #[inline(always)]
+    pub fn params(&mut self, params: DecreasePositionPostSwapParams) -> &mut Self {
         self.params = Some(params);
         self
-      }
-        /// Add an aditional account to the instruction.
-  #[inline(always)]
-  pub fn add_remaining_account(&mut self, account: solana_program::instruction::AccountMeta) -> &mut Self {
-    self.__remaining_accounts.push(account);
-    self
-  }
-  /// Add additional accounts to the instruction.
-  #[inline(always)]
-  pub fn add_remaining_accounts(&mut self, accounts: &[solana_program::instruction::AccountMeta]) -> &mut Self {
-    self.__remaining_accounts.extend_from_slice(accounts);
-    self
-  }
-  #[allow(clippy::clone_on_copy)]
-  pub fn instruction(&self) -> solana_program::instruction::Instruction {
-    let accounts = DecreasePositionPostSwap {
-                              keeper: self.keeper.expect("keeper is not set"),
-                                        position_request: self.position_request.expect("position_request is not set"),
-                                        position_request_ata: self.position_request_ata.expect("position_request_ata is not set"),
-                                        event_authority: self.event_authority.expect("event_authority is not set"),
-                                        program: self.program.expect("program is not set"),
-                      };
-          let args = DecreasePositionPostSwapInstructionArgs {
-                                                              params: self.params.clone().expect("params is not set"),
-                                    };
-    
-    accounts.instruction_with_remaining_accounts(args, &self.__remaining_accounts)
-  }
+    }
+    /// Add an aditional account to the instruction.
+    #[inline(always)]
+    pub fn add_remaining_account(
+        &mut self,
+        account: solana_program::instruction::AccountMeta,
+    ) -> &mut Self {
+        self.__remaining_accounts.push(account);
+        self
+    }
+    /// Add additional accounts to the instruction.
+    #[inline(always)]
+    pub fn add_remaining_accounts(
+        &mut self,
+        accounts: &[solana_program::instruction::AccountMeta],
+    ) -> &mut Self {
+        self.__remaining_accounts.extend_from_slice(accounts);
+        self
+    }
+    #[allow(clippy::clone_on_copy)]
+    pub fn instruction(&self) -> solana_program::instruction::Instruction {
+        let accounts = DecreasePositionPostSwap {
+            keeper: self.keeper.expect("keeper is not set"),
+            position_request: self.position_request.expect("position_request is not set"),
+            position_request_ata: self
+                .position_request_ata
+                .expect("position_request_ata is not set"),
+            event_authority: self.event_authority.expect("event_authority is not set"),
+            program: self.program.expect("program is not set"),
+        };
+        let args = DecreasePositionPostSwapInstructionArgs {
+            params: self.params.clone().expect("params is not set"),
+        };
+
+        accounts.instruction_with_remaining_accounts(args, &self.__remaining_accounts)
+    }
 }
 
-  /// `decrease_position_post_swap` CPI accounts.
-  pub struct DecreasePositionPostSwapCpiAccounts<'a, 'b> {
-          
-                    
-              pub keeper: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub position_request: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub position_request_ata: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub event_authority: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub program: &'b solana_program::account_info::AccountInfo<'a>,
-            }
+/// `decrease_position_post_swap` CPI accounts.
+pub struct DecreasePositionPostSwapCpiAccounts<'a, 'b> {
+    pub keeper: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub position_request: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub position_request_ata: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub event_authority: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub program: &'b solana_program::account_info::AccountInfo<'a>,
+}
 
 /// `decrease_position_post_swap` CPI instruction.
 pub struct DecreasePositionPostSwapCpi<'a, 'b> {
-  /// The program to invoke.
-  pub __program: &'b solana_program::account_info::AccountInfo<'a>,
-      
-              
-          pub keeper: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub position_request: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub position_request_ata: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub event_authority: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub program: &'b solana_program::account_info::AccountInfo<'a>,
-            /// The arguments for the instruction.
+    /// The program to invoke.
+    pub __program: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub keeper: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub position_request: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub position_request_ata: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub event_authority: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub program: &'b solana_program::account_info::AccountInfo<'a>,
+    /// The arguments for the instruction.
     pub __args: DecreasePositionPostSwapInstructionArgs,
-  }
+}
 
 impl<'a, 'b> DecreasePositionPostSwapCpi<'a, 'b> {
-  pub fn new(
-    program: &'b solana_program::account_info::AccountInfo<'a>,
-          accounts: DecreasePositionPostSwapCpiAccounts<'a, 'b>,
-              args: DecreasePositionPostSwapInstructionArgs,
-      ) -> Self {
-    Self {
-      __program: program,
-              keeper: accounts.keeper,
-              position_request: accounts.position_request,
-              position_request_ata: accounts.position_request_ata,
-              event_authority: accounts.event_authority,
-              program: accounts.program,
-                    __args: args,
-          }
-  }
-  #[inline(always)]
-  pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed_with_remaining_accounts(&[], &[])
-  }
-  #[inline(always)]
-  pub fn invoke_with_remaining_accounts(&self, remaining_accounts: &[(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)]) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed_with_remaining_accounts(&[], remaining_accounts)
-  }
-  #[inline(always)]
-  pub fn invoke_signed(&self, signers_seeds: &[&[&[u8]]]) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed_with_remaining_accounts(signers_seeds, &[])
-  }
-  #[allow(clippy::clone_on_copy)]
-  #[allow(clippy::vec_init_then_push)]
-  pub fn invoke_signed_with_remaining_accounts(
-    &self,
-    signers_seeds: &[&[&[u8]]],
-    remaining_accounts: &[(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)]
-  ) -> solana_program::entrypoint::ProgramResult {
-    let mut accounts = Vec::with_capacity(5 + remaining_accounts.len());
-                            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            *self.keeper.key,
-            true
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            *self.position_request.key,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            *self.position_request_ata.key,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            *self.event_authority.key,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            *self.program.key,
-            false
-          ));
-                      remaining_accounts.iter().for_each(|remaining_account| {
-      accounts.push(solana_program::instruction::AccountMeta {
-          pubkey: *remaining_account.0.key,
-          is_signer: remaining_account.1,
-          is_writable: remaining_account.2,
-      })
-    });
-    let mut data = DecreasePositionPostSwapInstructionData::new().try_to_vec().unwrap();
-          let mut args = self.__args.try_to_vec().unwrap();
-      data.append(&mut args);
-    
-    let instruction = solana_program::instruction::Instruction {
-      program_id: crate::PERPETUALS_ID,
-      accounts,
-      data,
-    };
-    let mut account_infos = Vec::with_capacity(5 + 1 + remaining_accounts.len());
-    account_infos.push(self.__program.clone());
-                  account_infos.push(self.keeper.clone());
-                        account_infos.push(self.position_request.clone());
-                        account_infos.push(self.position_request_ata.clone());
-                        account_infos.push(self.event_authority.clone());
-                        account_infos.push(self.program.clone());
-              remaining_accounts.iter().for_each(|remaining_account| account_infos.push(remaining_account.0.clone()));
-
-    if signers_seeds.is_empty() {
-      solana_program::program::invoke(&instruction, &account_infos)
-    } else {
-      solana_program::program::invoke_signed(&instruction, &account_infos, signers_seeds)
+    pub fn new(
+        program: &'b solana_program::account_info::AccountInfo<'a>,
+        accounts: DecreasePositionPostSwapCpiAccounts<'a, 'b>,
+        args: DecreasePositionPostSwapInstructionArgs,
+    ) -> Self {
+        Self {
+            __program: program,
+            keeper: accounts.keeper,
+            position_request: accounts.position_request,
+            position_request_ata: accounts.position_request_ata,
+            event_authority: accounts.event_authority,
+            program: accounts.program,
+            __args: args,
+        }
     }
-  }
+    #[inline(always)]
+    pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed_with_remaining_accounts(&[], &[])
+    }
+    #[inline(always)]
+    pub fn invoke_with_remaining_accounts(
+        &self,
+        remaining_accounts: &[(
+            &'b solana_program::account_info::AccountInfo<'a>,
+            bool,
+            bool,
+        )],
+    ) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed_with_remaining_accounts(&[], remaining_accounts)
+    }
+    #[inline(always)]
+    pub fn invoke_signed(
+        &self,
+        signers_seeds: &[&[&[u8]]],
+    ) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed_with_remaining_accounts(signers_seeds, &[])
+    }
+    #[allow(clippy::clone_on_copy)]
+    #[allow(clippy::vec_init_then_push)]
+    pub fn invoke_signed_with_remaining_accounts(
+        &self,
+        signers_seeds: &[&[&[u8]]],
+        remaining_accounts: &[(
+            &'b solana_program::account_info::AccountInfo<'a>,
+            bool,
+            bool,
+        )],
+    ) -> solana_program::entrypoint::ProgramResult {
+        let mut accounts = Vec::with_capacity(5 + remaining_accounts.len());
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            *self.keeper.key,
+            true,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            *self.position_request.key,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            *self.position_request_ata.key,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            *self.event_authority.key,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            *self.program.key,
+            false,
+        ));
+        remaining_accounts.iter().for_each(|remaining_account| {
+            accounts.push(solana_program::instruction::AccountMeta {
+                pubkey: *remaining_account.0.key,
+                is_signer: remaining_account.1,
+                is_writable: remaining_account.2,
+            })
+        });
+        let mut data = DecreasePositionPostSwapInstructionData::new()
+            .try_to_vec()
+            .unwrap();
+        let mut args = self.__args.try_to_vec().unwrap();
+        data.append(&mut args);
+
+        let instruction = solana_program::instruction::Instruction {
+            program_id: PERPETUALS_ID,
+            accounts,
+            data,
+        };
+        let mut account_infos = Vec::with_capacity(5 + 1 + remaining_accounts.len());
+        account_infos.push(self.__program.clone());
+        account_infos.push(self.keeper.clone());
+        account_infos.push(self.position_request.clone());
+        account_infos.push(self.position_request_ata.clone());
+        account_infos.push(self.event_authority.clone());
+        account_infos.push(self.program.clone());
+        remaining_accounts
+            .iter()
+            .for_each(|remaining_account| account_infos.push(remaining_account.0.clone()));
+
+        if signers_seeds.is_empty() {
+            solana_program::program::invoke(&instruction, &account_infos)
+        } else {
+            solana_program::program::invoke_signed(&instruction, &account_infos, signers_seeds)
+        }
+    }
 }
 
 /// Instruction builder for `DecreasePositionPostSwap` via CPI.
 ///
 /// ### Accounts:
 ///
-                ///   0. `[signer]` keeper
-          ///   1. `[]` position_request
-          ///   2. `[]` position_request_ata
-          ///   3. `[]` event_authority
-          ///   4. `[]` program
+///   0. `[signer]` keeper
+///   1. `[]` position_request
+///   2. `[]` position_request_ata
+///   3. `[]` event_authority
+///   4. `[]` program
 #[derive(Clone, Debug)]
 pub struct DecreasePositionPostSwapCpiBuilder<'a, 'b> {
-  instruction: Box<DecreasePositionPostSwapCpiBuilderInstruction<'a, 'b>>,
+    instruction: Box<DecreasePositionPostSwapCpiBuilderInstruction<'a, 'b>>,
 }
 
 impl<'a, 'b> DecreasePositionPostSwapCpiBuilder<'a, 'b> {
-  pub fn new(program: &'b solana_program::account_info::AccountInfo<'a>) -> Self {
-    let instruction = Box::new(DecreasePositionPostSwapCpiBuilderInstruction {
-      __program: program,
-              keeper: None,
-              position_request: None,
-              position_request_ata: None,
-              event_authority: None,
-              program: None,
-                                            params: None,
-                    __remaining_accounts: Vec::new(),
-    });
-    Self { instruction }
-  }
-      #[inline(always)]
-    pub fn keeper(&mut self, keeper: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.keeper = Some(keeper);
-                    self
+    pub fn new(program: &'b solana_program::account_info::AccountInfo<'a>) -> Self {
+        let instruction = Box::new(DecreasePositionPostSwapCpiBuilderInstruction {
+            __program: program,
+            keeper: None,
+            position_request: None,
+            position_request_ata: None,
+            event_authority: None,
+            program: None,
+            params: None,
+            __remaining_accounts: Vec::new(),
+        });
+        Self { instruction }
     }
-      #[inline(always)]
-    pub fn position_request(&mut self, position_request: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.position_request = Some(position_request);
-                    self
+    #[inline(always)]
+    pub fn keeper(
+        &mut self,
+        keeper: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.keeper = Some(keeper);
+        self
     }
-      #[inline(always)]
-    pub fn position_request_ata(&mut self, position_request_ata: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.position_request_ata = Some(position_request_ata);
-                    self
+    #[inline(always)]
+    pub fn position_request(
+        &mut self,
+        position_request: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.position_request = Some(position_request);
+        self
     }
-      #[inline(always)]
-    pub fn event_authority(&mut self, event_authority: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.event_authority = Some(event_authority);
-                    self
+    #[inline(always)]
+    pub fn position_request_ata(
+        &mut self,
+        position_request_ata: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.position_request_ata = Some(position_request_ata);
+        self
     }
-      #[inline(always)]
-    pub fn program(&mut self, program: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.program = Some(program);
-                    self
+    #[inline(always)]
+    pub fn event_authority(
+        &mut self,
+        event_authority: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.event_authority = Some(event_authority);
+        self
     }
-                    #[inline(always)]
-      pub fn params(&mut self, params: DecreasePositionPostSwapParams) -> &mut Self {
+    #[inline(always)]
+    pub fn program(
+        &mut self,
+        program: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.program = Some(program);
+        self
+    }
+    #[inline(always)]
+    pub fn params(&mut self, params: DecreasePositionPostSwapParams) -> &mut Self {
         self.instruction.params = Some(params);
         self
-      }
-        /// Add an additional account to the instruction.
-  #[inline(always)]
-  pub fn add_remaining_account(&mut self, account: &'b solana_program::account_info::AccountInfo<'a>, is_writable: bool, is_signer: bool) -> &mut Self {
-    self.instruction.__remaining_accounts.push((account, is_writable, is_signer));
-    self
-  }
-  /// Add additional accounts to the instruction.
-  ///
-  /// Each account is represented by a tuple of the `AccountInfo`, a `bool` indicating whether the account is writable or not,
-  /// and a `bool` indicating whether the account is a signer or not.
-  #[inline(always)]
-  pub fn add_remaining_accounts(&mut self, accounts: &[(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)]) -> &mut Self {
-    self.instruction.__remaining_accounts.extend_from_slice(accounts);
-    self
-  }
-  #[inline(always)]
-  pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed(&[])
-  }
-  #[allow(clippy::clone_on_copy)]
-  #[allow(clippy::vec_init_then_push)]
-  pub fn invoke_signed(&self, signers_seeds: &[&[&[u8]]]) -> solana_program::entrypoint::ProgramResult {
-          let args = DecreasePositionPostSwapInstructionArgs {
-                                                              params: self.instruction.params.clone().expect("params is not set"),
-                                    };
+    }
+    /// Add an additional account to the instruction.
+    #[inline(always)]
+    pub fn add_remaining_account(
+        &mut self,
+        account: &'b solana_program::account_info::AccountInfo<'a>,
+        is_writable: bool,
+        is_signer: bool,
+    ) -> &mut Self {
+        self.instruction
+            .__remaining_accounts
+            .push((account, is_writable, is_signer));
+        self
+    }
+    /// Add additional accounts to the instruction.
+    ///
+    /// Each account is represented by a tuple of the `AccountInfo`, a `bool` indicating whether the account is writable or not,
+    /// and a `bool` indicating whether the account is a signer or not.
+    #[inline(always)]
+    pub fn add_remaining_accounts(
+        &mut self,
+        accounts: &[(
+            &'b solana_program::account_info::AccountInfo<'a>,
+            bool,
+            bool,
+        )],
+    ) -> &mut Self {
+        self.instruction
+            .__remaining_accounts
+            .extend_from_slice(accounts);
+        self
+    }
+    #[inline(always)]
+    pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed(&[])
+    }
+    #[allow(clippy::clone_on_copy)]
+    #[allow(clippy::vec_init_then_push)]
+    pub fn invoke_signed(
+        &self,
+        signers_seeds: &[&[&[u8]]],
+    ) -> solana_program::entrypoint::ProgramResult {
+        let args = DecreasePositionPostSwapInstructionArgs {
+            params: self.instruction.params.clone().expect("params is not set"),
+        };
         let instruction = DecreasePositionPostSwapCpi {
-        __program: self.instruction.__program,
-                  
-          keeper: self.instruction.keeper.expect("keeper is not set"),
-                  
-          position_request: self.instruction.position_request.expect("position_request is not set"),
-                  
-          position_request_ata: self.instruction.position_request_ata.expect("position_request_ata is not set"),
-                  
-          event_authority: self.instruction.event_authority.expect("event_authority is not set"),
-                  
-          program: self.instruction.program.expect("program is not set"),
-                          __args: args,
-            };
-    instruction.invoke_signed_with_remaining_accounts(signers_seeds, &self.instruction.__remaining_accounts)
-  }
+            __program: self.instruction.__program,
+
+            keeper: self.instruction.keeper.expect("keeper is not set"),
+
+            position_request: self
+                .instruction
+                .position_request
+                .expect("position_request is not set"),
+
+            position_request_ata: self
+                .instruction
+                .position_request_ata
+                .expect("position_request_ata is not set"),
+
+            event_authority: self
+                .instruction
+                .event_authority
+                .expect("event_authority is not set"),
+
+            program: self.instruction.program.expect("program is not set"),
+            __args: args,
+        };
+        instruction.invoke_signed_with_remaining_accounts(
+            signers_seeds,
+            &self.instruction.__remaining_accounts,
+        )
+    }
 }
 
 #[derive(Clone, Debug)]
 struct DecreasePositionPostSwapCpiBuilderInstruction<'a, 'b> {
-  __program: &'b solana_program::account_info::AccountInfo<'a>,
-            keeper: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                position_request: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                position_request_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                event_authority: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                program: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                        params: Option<DecreasePositionPostSwapParams>,
-        /// Additional instruction accounts `(AccountInfo, is_writable, is_signer)`.
-  __remaining_accounts: Vec<(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)>,
+    __program: &'b solana_program::account_info::AccountInfo<'a>,
+    keeper: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    position_request: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    position_request_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    event_authority: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    program: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    params: Option<DecreasePositionPostSwapParams>,
+    /// Additional instruction accounts `(AccountInfo, is_writable, is_signer)`.
+    __remaining_accounts: Vec<(
+        &'b solana_program::account_info::AccountInfo<'a>,
+        bool,
+        bool,
+    )>,
 }
-

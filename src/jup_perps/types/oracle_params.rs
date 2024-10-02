@@ -6,7 +6,7 @@
 //!
 
 use solana_program::pubkey::Pubkey;
-use crate::generated::types::OracleType;
+use crate::jup_perps::types::OracleType;
 use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
 

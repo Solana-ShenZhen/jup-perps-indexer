@@ -5,8 +5,8 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
-use crate::generated::types::Fees;
-use crate::generated::types::Limit;
+use crate::jup_perps::types::Fees;
+use crate::jup_perps::types::Limit;
 use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
 

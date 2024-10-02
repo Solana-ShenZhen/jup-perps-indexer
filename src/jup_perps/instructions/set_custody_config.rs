@@ -5,346 +5,394 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
+use crate::jup_perps::types::SetCustodyConfigParams;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
-use crate::generated::types::SetCustodyConfigParams;
+use crate::jup_perps::programs::PERPETUALS_ID;
 
 /// Accounts.
 pub struct SetCustodyConfig {
-      
-              
-          pub admin: solana_program::pubkey::Pubkey,
-          
-              
-          pub perpetuals: solana_program::pubkey::Pubkey,
-          
-              
-          pub custody: solana_program::pubkey::Pubkey,
-      }
+    pub admin: solana_program::pubkey::Pubkey,
+
+    pub perpetuals: solana_program::pubkey::Pubkey,
+
+    pub custody: solana_program::pubkey::Pubkey,
+}
 
 impl SetCustodyConfig {
-  pub fn instruction(&self, args: SetCustodyConfigInstructionArgs) -> solana_program::instruction::Instruction {
-    self.instruction_with_remaining_accounts(args, &[])
-  }
-  #[allow(clippy::vec_init_then_push)]
-  pub fn instruction_with_remaining_accounts(&self, args: SetCustodyConfigInstructionArgs, remaining_accounts: &[solana_program::instruction::AccountMeta]) -> solana_program::instruction::Instruction {
-    let mut accounts = Vec::with_capacity(3 + remaining_accounts.len());
-                            accounts.push(solana_program::instruction::AccountMeta::new(
-            self.admin,
-            true
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            self.perpetuals,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new(
-            self.custody,
-            false
-          ));
-                      accounts.extend_from_slice(remaining_accounts);
-    let mut data = SetCustodyConfigInstructionData::new().try_to_vec().unwrap();
-          let mut args = args.try_to_vec().unwrap();
-      data.append(&mut args);
-    
-    solana_program::instruction::Instruction {
-      program_id: crate::PERPETUALS_ID,
-      accounts,
-      data,
+    pub fn instruction(
+        &self,
+        args: SetCustodyConfigInstructionArgs,
+    ) -> solana_program::instruction::Instruction {
+        self.instruction_with_remaining_accounts(args, &[])
     }
-  }
+    #[allow(clippy::vec_init_then_push)]
+    pub fn instruction_with_remaining_accounts(
+        &self,
+        args: SetCustodyConfigInstructionArgs,
+        remaining_accounts: &[solana_program::instruction::AccountMeta],
+    ) -> solana_program::instruction::Instruction {
+        let mut accounts = Vec::with_capacity(3 + remaining_accounts.len());
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            self.admin, true,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            self.perpetuals,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            self.custody,
+            false,
+        ));
+        accounts.extend_from_slice(remaining_accounts);
+        let mut data = SetCustodyConfigInstructionData::new().try_to_vec().unwrap();
+        let mut args = args.try_to_vec().unwrap();
+        data.append(&mut args);
+
+        solana_program::instruction::Instruction {
+            program_id: PERPETUALS_ID,
+            accounts,
+            data,
+        }
+    }
 }
 
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct SetCustodyConfigInstructionData {
-            discriminator: [u8; 8],
-            }
+    discriminator: [u8; 8],
+}
 
 impl SetCustodyConfigInstructionData {
-  pub fn new() -> Self {
-    Self {
-                        discriminator: [133, 97, 130, 143, 215, 229, 36, 176],
-                                }
-  }
+    pub fn new() -> Self {
+        Self {
+            discriminator: [133, 97, 130, 143, 215, 229, 36, 176],
+        }
+    }
 }
 
 impl Default for SetCustodyConfigInstructionData {
-  fn default() -> Self {
-    Self::new()
-  }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct SetCustodyConfigInstructionArgs {
-                  pub params: SetCustodyConfigParams,
-      }
-
+    pub params: SetCustodyConfigParams,
+}
 
 /// Instruction builder for `SetCustodyConfig`.
 ///
 /// ### Accounts:
 ///
-                      ///   0. `[writable, signer]` admin
-          ///   1. `[]` perpetuals
-                ///   2. `[writable]` custody
+///   0. `[writable, signer]` admin
+///   1. `[]` perpetuals
+///   2. `[writable]` custody
 #[derive(Clone, Debug, Default)]
 pub struct SetCustodyConfigBuilder {
-            admin: Option<solana_program::pubkey::Pubkey>,
-                perpetuals: Option<solana_program::pubkey::Pubkey>,
-                custody: Option<solana_program::pubkey::Pubkey>,
-                        params: Option<SetCustodyConfigParams>,
-        __remaining_accounts: Vec<solana_program::instruction::AccountMeta>,
+    admin: Option<solana_program::pubkey::Pubkey>,
+    perpetuals: Option<solana_program::pubkey::Pubkey>,
+    custody: Option<solana_program::pubkey::Pubkey>,
+    params: Option<SetCustodyConfigParams>,
+    __remaining_accounts: Vec<solana_program::instruction::AccountMeta>,
 }
 
 impl SetCustodyConfigBuilder {
-  pub fn new() -> Self {
-    Self::default()
-  }
-            #[inline(always)]
+    pub fn new() -> Self {
+        Self::default()
+    }
+    #[inline(always)]
     pub fn admin(&mut self, admin: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.admin = Some(admin);
-                    self
+        self.admin = Some(admin);
+        self
     }
-            #[inline(always)]
+    #[inline(always)]
     pub fn perpetuals(&mut self, perpetuals: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.perpetuals = Some(perpetuals);
-                    self
+        self.perpetuals = Some(perpetuals);
+        self
     }
-            #[inline(always)]
+    #[inline(always)]
     pub fn custody(&mut self, custody: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.custody = Some(custody);
-                    self
+        self.custody = Some(custody);
+        self
     }
-                    #[inline(always)]
-      pub fn params(&mut self, params: SetCustodyConfigParams) -> &mut Self {
+    #[inline(always)]
+    pub fn params(&mut self, params: SetCustodyConfigParams) -> &mut Self {
         self.params = Some(params);
         self
-      }
-        /// Add an aditional account to the instruction.
-  #[inline(always)]
-  pub fn add_remaining_account(&mut self, account: solana_program::instruction::AccountMeta) -> &mut Self {
-    self.__remaining_accounts.push(account);
-    self
-  }
-  /// Add additional accounts to the instruction.
-  #[inline(always)]
-  pub fn add_remaining_accounts(&mut self, accounts: &[solana_program::instruction::AccountMeta]) -> &mut Self {
-    self.__remaining_accounts.extend_from_slice(accounts);
-    self
-  }
-  #[allow(clippy::clone_on_copy)]
-  pub fn instruction(&self) -> solana_program::instruction::Instruction {
-    let accounts = SetCustodyConfig {
-                              admin: self.admin.expect("admin is not set"),
-                                        perpetuals: self.perpetuals.expect("perpetuals is not set"),
-                                        custody: self.custody.expect("custody is not set"),
-                      };
-          let args = SetCustodyConfigInstructionArgs {
-                                                              params: self.params.clone().expect("params is not set"),
-                                    };
-    
-    accounts.instruction_with_remaining_accounts(args, &self.__remaining_accounts)
-  }
+    }
+    /// Add an aditional account to the instruction.
+    #[inline(always)]
+    pub fn add_remaining_account(
+        &mut self,
+        account: solana_program::instruction::AccountMeta,
+    ) -> &mut Self {
+        self.__remaining_accounts.push(account);
+        self
+    }
+    /// Add additional accounts to the instruction.
+    #[inline(always)]
+    pub fn add_remaining_accounts(
+        &mut self,
+        accounts: &[solana_program::instruction::AccountMeta],
+    ) -> &mut Self {
+        self.__remaining_accounts.extend_from_slice(accounts);
+        self
+    }
+    #[allow(clippy::clone_on_copy)]
+    pub fn instruction(&self) -> solana_program::instruction::Instruction {
+        let accounts = SetCustodyConfig {
+            admin: self.admin.expect("admin is not set"),
+            perpetuals: self.perpetuals.expect("perpetuals is not set"),
+            custody: self.custody.expect("custody is not set"),
+        };
+        let args = SetCustodyConfigInstructionArgs {
+            params: self.params.clone().expect("params is not set"),
+        };
+
+        accounts.instruction_with_remaining_accounts(args, &self.__remaining_accounts)
+    }
 }
 
-  /// `set_custody_config` CPI accounts.
-  pub struct SetCustodyConfigCpiAccounts<'a, 'b> {
-          
-                    
-              pub admin: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub perpetuals: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub custody: &'b solana_program::account_info::AccountInfo<'a>,
-            }
+/// `set_custody_config` CPI accounts.
+pub struct SetCustodyConfigCpiAccounts<'a, 'b> {
+    pub admin: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub perpetuals: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub custody: &'b solana_program::account_info::AccountInfo<'a>,
+}
 
 /// `set_custody_config` CPI instruction.
 pub struct SetCustodyConfigCpi<'a, 'b> {
-  /// The program to invoke.
-  pub __program: &'b solana_program::account_info::AccountInfo<'a>,
-      
-              
-          pub admin: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub perpetuals: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub custody: &'b solana_program::account_info::AccountInfo<'a>,
-            /// The arguments for the instruction.
+    /// The program to invoke.
+    pub __program: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub admin: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub perpetuals: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub custody: &'b solana_program::account_info::AccountInfo<'a>,
+    /// The arguments for the instruction.
     pub __args: SetCustodyConfigInstructionArgs,
-  }
+}
 
 impl<'a, 'b> SetCustodyConfigCpi<'a, 'b> {
-  pub fn new(
-    program: &'b solana_program::account_info::AccountInfo<'a>,
-          accounts: SetCustodyConfigCpiAccounts<'a, 'b>,
-              args: SetCustodyConfigInstructionArgs,
-      ) -> Self {
-    Self {
-      __program: program,
-              admin: accounts.admin,
-              perpetuals: accounts.perpetuals,
-              custody: accounts.custody,
-                    __args: args,
-          }
-  }
-  #[inline(always)]
-  pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed_with_remaining_accounts(&[], &[])
-  }
-  #[inline(always)]
-  pub fn invoke_with_remaining_accounts(&self, remaining_accounts: &[(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)]) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed_with_remaining_accounts(&[], remaining_accounts)
-  }
-  #[inline(always)]
-  pub fn invoke_signed(&self, signers_seeds: &[&[&[u8]]]) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed_with_remaining_accounts(signers_seeds, &[])
-  }
-  #[allow(clippy::clone_on_copy)]
-  #[allow(clippy::vec_init_then_push)]
-  pub fn invoke_signed_with_remaining_accounts(
-    &self,
-    signers_seeds: &[&[&[u8]]],
-    remaining_accounts: &[(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)]
-  ) -> solana_program::entrypoint::ProgramResult {
-    let mut accounts = Vec::with_capacity(3 + remaining_accounts.len());
-                            accounts.push(solana_program::instruction::AccountMeta::new(
-            *self.admin.key,
-            true
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            *self.perpetuals.key,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new(
-            *self.custody.key,
-            false
-          ));
-                      remaining_accounts.iter().for_each(|remaining_account| {
-      accounts.push(solana_program::instruction::AccountMeta {
-          pubkey: *remaining_account.0.key,
-          is_signer: remaining_account.1,
-          is_writable: remaining_account.2,
-      })
-    });
-    let mut data = SetCustodyConfigInstructionData::new().try_to_vec().unwrap();
-          let mut args = self.__args.try_to_vec().unwrap();
-      data.append(&mut args);
-    
-    let instruction = solana_program::instruction::Instruction {
-      program_id: crate::PERPETUALS_ID,
-      accounts,
-      data,
-    };
-    let mut account_infos = Vec::with_capacity(3 + 1 + remaining_accounts.len());
-    account_infos.push(self.__program.clone());
-                  account_infos.push(self.admin.clone());
-                        account_infos.push(self.perpetuals.clone());
-                        account_infos.push(self.custody.clone());
-              remaining_accounts.iter().for_each(|remaining_account| account_infos.push(remaining_account.0.clone()));
-
-    if signers_seeds.is_empty() {
-      solana_program::program::invoke(&instruction, &account_infos)
-    } else {
-      solana_program::program::invoke_signed(&instruction, &account_infos, signers_seeds)
+    pub fn new(
+        program: &'b solana_program::account_info::AccountInfo<'a>,
+        accounts: SetCustodyConfigCpiAccounts<'a, 'b>,
+        args: SetCustodyConfigInstructionArgs,
+    ) -> Self {
+        Self {
+            __program: program,
+            admin: accounts.admin,
+            perpetuals: accounts.perpetuals,
+            custody: accounts.custody,
+            __args: args,
+        }
     }
-  }
+    #[inline(always)]
+    pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed_with_remaining_accounts(&[], &[])
+    }
+    #[inline(always)]
+    pub fn invoke_with_remaining_accounts(
+        &self,
+        remaining_accounts: &[(
+            &'b solana_program::account_info::AccountInfo<'a>,
+            bool,
+            bool,
+        )],
+    ) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed_with_remaining_accounts(&[], remaining_accounts)
+    }
+    #[inline(always)]
+    pub fn invoke_signed(
+        &self,
+        signers_seeds: &[&[&[u8]]],
+    ) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed_with_remaining_accounts(signers_seeds, &[])
+    }
+    #[allow(clippy::clone_on_copy)]
+    #[allow(clippy::vec_init_then_push)]
+    pub fn invoke_signed_with_remaining_accounts(
+        &self,
+        signers_seeds: &[&[&[u8]]],
+        remaining_accounts: &[(
+            &'b solana_program::account_info::AccountInfo<'a>,
+            bool,
+            bool,
+        )],
+    ) -> solana_program::entrypoint::ProgramResult {
+        let mut accounts = Vec::with_capacity(3 + remaining_accounts.len());
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            *self.admin.key,
+            true,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            *self.perpetuals.key,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            *self.custody.key,
+            false,
+        ));
+        remaining_accounts.iter().for_each(|remaining_account| {
+            accounts.push(solana_program::instruction::AccountMeta {
+                pubkey: *remaining_account.0.key,
+                is_signer: remaining_account.1,
+                is_writable: remaining_account.2,
+            })
+        });
+        let mut data = SetCustodyConfigInstructionData::new().try_to_vec().unwrap();
+        let mut args = self.__args.try_to_vec().unwrap();
+        data.append(&mut args);
+
+        let instruction = solana_program::instruction::Instruction {
+            program_id: PERPETUALS_ID,
+            accounts,
+            data,
+        };
+        let mut account_infos = Vec::with_capacity(3 + 1 + remaining_accounts.len());
+        account_infos.push(self.__program.clone());
+        account_infos.push(self.admin.clone());
+        account_infos.push(self.perpetuals.clone());
+        account_infos.push(self.custody.clone());
+        remaining_accounts
+            .iter()
+            .for_each(|remaining_account| account_infos.push(remaining_account.0.clone()));
+
+        if signers_seeds.is_empty() {
+            solana_program::program::invoke(&instruction, &account_infos)
+        } else {
+            solana_program::program::invoke_signed(&instruction, &account_infos, signers_seeds)
+        }
+    }
 }
 
 /// Instruction builder for `SetCustodyConfig` via CPI.
 ///
 /// ### Accounts:
 ///
-                      ///   0. `[writable, signer]` admin
-          ///   1. `[]` perpetuals
-                ///   2. `[writable]` custody
+///   0. `[writable, signer]` admin
+///   1. `[]` perpetuals
+///   2. `[writable]` custody
 #[derive(Clone, Debug)]
 pub struct SetCustodyConfigCpiBuilder<'a, 'b> {
-  instruction: Box<SetCustodyConfigCpiBuilderInstruction<'a, 'b>>,
+    instruction: Box<SetCustodyConfigCpiBuilderInstruction<'a, 'b>>,
 }
 
 impl<'a, 'b> SetCustodyConfigCpiBuilder<'a, 'b> {
-  pub fn new(program: &'b solana_program::account_info::AccountInfo<'a>) -> Self {
-    let instruction = Box::new(SetCustodyConfigCpiBuilderInstruction {
-      __program: program,
-              admin: None,
-              perpetuals: None,
-              custody: None,
-                                            params: None,
-                    __remaining_accounts: Vec::new(),
-    });
-    Self { instruction }
-  }
-      #[inline(always)]
+    pub fn new(program: &'b solana_program::account_info::AccountInfo<'a>) -> Self {
+        let instruction = Box::new(SetCustodyConfigCpiBuilderInstruction {
+            __program: program,
+            admin: None,
+            perpetuals: None,
+            custody: None,
+            params: None,
+            __remaining_accounts: Vec::new(),
+        });
+        Self { instruction }
+    }
+    #[inline(always)]
     pub fn admin(&mut self, admin: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.admin = Some(admin);
-                    self
+        self.instruction.admin = Some(admin);
+        self
     }
-      #[inline(always)]
-    pub fn perpetuals(&mut self, perpetuals: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.perpetuals = Some(perpetuals);
-                    self
+    #[inline(always)]
+    pub fn perpetuals(
+        &mut self,
+        perpetuals: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.perpetuals = Some(perpetuals);
+        self
     }
-      #[inline(always)]
-    pub fn custody(&mut self, custody: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.custody = Some(custody);
-                    self
+    #[inline(always)]
+    pub fn custody(
+        &mut self,
+        custody: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.custody = Some(custody);
+        self
     }
-                    #[inline(always)]
-      pub fn params(&mut self, params: SetCustodyConfigParams) -> &mut Self {
+    #[inline(always)]
+    pub fn params(&mut self, params: SetCustodyConfigParams) -> &mut Self {
         self.instruction.params = Some(params);
         self
-      }
-        /// Add an additional account to the instruction.
-  #[inline(always)]
-  pub fn add_remaining_account(&mut self, account: &'b solana_program::account_info::AccountInfo<'a>, is_writable: bool, is_signer: bool) -> &mut Self {
-    self.instruction.__remaining_accounts.push((account, is_writable, is_signer));
-    self
-  }
-  /// Add additional accounts to the instruction.
-  ///
-  /// Each account is represented by a tuple of the `AccountInfo`, a `bool` indicating whether the account is writable or not,
-  /// and a `bool` indicating whether the account is a signer or not.
-  #[inline(always)]
-  pub fn add_remaining_accounts(&mut self, accounts: &[(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)]) -> &mut Self {
-    self.instruction.__remaining_accounts.extend_from_slice(accounts);
-    self
-  }
-  #[inline(always)]
-  pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed(&[])
-  }
-  #[allow(clippy::clone_on_copy)]
-  #[allow(clippy::vec_init_then_push)]
-  pub fn invoke_signed(&self, signers_seeds: &[&[&[u8]]]) -> solana_program::entrypoint::ProgramResult {
-          let args = SetCustodyConfigInstructionArgs {
-                                                              params: self.instruction.params.clone().expect("params is not set"),
-                                    };
+    }
+    /// Add an additional account to the instruction.
+    #[inline(always)]
+    pub fn add_remaining_account(
+        &mut self,
+        account: &'b solana_program::account_info::AccountInfo<'a>,
+        is_writable: bool,
+        is_signer: bool,
+    ) -> &mut Self {
+        self.instruction
+            .__remaining_accounts
+            .push((account, is_writable, is_signer));
+        self
+    }
+    /// Add additional accounts to the instruction.
+    ///
+    /// Each account is represented by a tuple of the `AccountInfo`, a `bool` indicating whether the account is writable or not,
+    /// and a `bool` indicating whether the account is a signer or not.
+    #[inline(always)]
+    pub fn add_remaining_accounts(
+        &mut self,
+        accounts: &[(
+            &'b solana_program::account_info::AccountInfo<'a>,
+            bool,
+            bool,
+        )],
+    ) -> &mut Self {
+        self.instruction
+            .__remaining_accounts
+            .extend_from_slice(accounts);
+        self
+    }
+    #[inline(always)]
+    pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed(&[])
+    }
+    #[allow(clippy::clone_on_copy)]
+    #[allow(clippy::vec_init_then_push)]
+    pub fn invoke_signed(
+        &self,
+        signers_seeds: &[&[&[u8]]],
+    ) -> solana_program::entrypoint::ProgramResult {
+        let args = SetCustodyConfigInstructionArgs {
+            params: self.instruction.params.clone().expect("params is not set"),
+        };
         let instruction = SetCustodyConfigCpi {
-        __program: self.instruction.__program,
-                  
-          admin: self.instruction.admin.expect("admin is not set"),
-                  
-          perpetuals: self.instruction.perpetuals.expect("perpetuals is not set"),
-                  
-          custody: self.instruction.custody.expect("custody is not set"),
-                          __args: args,
-            };
-    instruction.invoke_signed_with_remaining_accounts(signers_seeds, &self.instruction.__remaining_accounts)
-  }
+            __program: self.instruction.__program,
+
+            admin: self.instruction.admin.expect("admin is not set"),
+
+            perpetuals: self.instruction.perpetuals.expect("perpetuals is not set"),
+
+            custody: self.instruction.custody.expect("custody is not set"),
+            __args: args,
+        };
+        instruction.invoke_signed_with_remaining_accounts(
+            signers_seeds,
+            &self.instruction.__remaining_accounts,
+        )
+    }
 }
 
 #[derive(Clone, Debug)]
 struct SetCustodyConfigCpiBuilderInstruction<'a, 'b> {
-  __program: &'b solana_program::account_info::AccountInfo<'a>,
-            admin: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                perpetuals: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                custody: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                        params: Option<SetCustodyConfigParams>,
-        /// Additional instruction accounts `(AccountInfo, is_writable, is_signer)`.
-  __remaining_accounts: Vec<(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)>,
+    __program: &'b solana_program::account_info::AccountInfo<'a>,
+    admin: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    perpetuals: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    custody: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    params: Option<SetCustodyConfigParams>,
+    /// Additional instruction accounts `(AccountInfo, is_writable, is_signer)`.
+    __remaining_accounts: Vec<(
+        &'b solana_program::account_info::AccountInfo<'a>,
+        bool,
+        bool,
+    )>,
 }
-

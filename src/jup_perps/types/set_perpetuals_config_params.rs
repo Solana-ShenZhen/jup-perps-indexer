@@ -5,7 +5,7 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
-use crate::generated::types::Permissions;
+use crate::jup_perps::types::Permissions;
 use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
 

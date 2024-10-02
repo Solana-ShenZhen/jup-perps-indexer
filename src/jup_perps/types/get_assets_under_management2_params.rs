@@ -5,7 +5,7 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
-use crate::generated::types::PriceCalcMode;
+use crate::jup_perps::types::PriceCalcMode;
 use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
 

@@ -5,641 +5,710 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
+use crate::jup_perps::types::ClosePositionRequestParams;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
-use crate::generated::types::ClosePositionRequestParams;
+use crate::jup_perps::programs::PERPETUALS_ID;
 
 /// Accounts.
 pub struct ClosePositionRequest {
-      
-              
-          pub keeper: Option<solana_program::pubkey::Pubkey>,
-          
-              
-          pub owner: solana_program::pubkey::Pubkey,
-          
-              
-          pub owner_ata: Option<solana_program::pubkey::Pubkey>,
-          
-              
-          pub pool: solana_program::pubkey::Pubkey,
-          
-              
-          pub position_request: solana_program::pubkey::Pubkey,
-          
-              
-          pub position_request_ata: solana_program::pubkey::Pubkey,
-          
-              
-          pub position: solana_program::pubkey::Pubkey,
-          
-              
-          pub token_program: solana_program::pubkey::Pubkey,
-          
-              
-          pub event_authority: solana_program::pubkey::Pubkey,
-          
-              
-          pub program: solana_program::pubkey::Pubkey,
-      }
+    pub keeper: Option<solana_program::pubkey::Pubkey>,
+
+    pub owner: solana_program::pubkey::Pubkey,
+
+    pub owner_ata: Option<solana_program::pubkey::Pubkey>,
+
+    pub pool: solana_program::pubkey::Pubkey,
+
+    pub position_request: solana_program::pubkey::Pubkey,
+
+    pub position_request_ata: solana_program::pubkey::Pubkey,
+
+    pub position: solana_program::pubkey::Pubkey,
+
+    pub token_program: solana_program::pubkey::Pubkey,
+
+    pub event_authority: solana_program::pubkey::Pubkey,
+
+    pub program: solana_program::pubkey::Pubkey,
+}
 
 impl ClosePositionRequest {
-  pub fn instruction(&self, args: ClosePositionRequestInstructionArgs) -> solana_program::instruction::Instruction {
-    self.instruction_with_remaining_accounts(args, &[])
-  }
-  #[allow(clippy::vec_init_then_push)]
-  pub fn instruction_with_remaining_accounts(&self, args: ClosePositionRequestInstructionArgs, remaining_accounts: &[solana_program::instruction::AccountMeta]) -> solana_program::instruction::Instruction {
-    let mut accounts = Vec::with_capacity(10 + remaining_accounts.len());
-                                        if let Some(keeper) = self.keeper {
-              accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-                keeper,
-                true,
-              ));
-            } else {
-              accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-                crate::PERPETUALS_ID,
-                false,
-              ));
-            }
-                                                    accounts.push(solana_program::instruction::AccountMeta::new(
-            self.owner,
-            false
-          ));
-                                                      if let Some(owner_ata) = self.owner_ata {
-              accounts.push(solana_program::instruction::AccountMeta::new(
-                owner_ata,
-                false,
-              ));
-            } else {
-              accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-                crate::PERPETUALS_ID,
-                false,
-              ));
-            }
-                                                    accounts.push(solana_program::instruction::AccountMeta::new(
-            self.pool,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new(
-            self.position_request,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new(
-            self.position_request_ata,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            self.position,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            self.token_program,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            self.event_authority,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            self.program,
-            false
-          ));
-                      accounts.extend_from_slice(remaining_accounts);
-    let mut data = ClosePositionRequestInstructionData::new().try_to_vec().unwrap();
-          let mut args = args.try_to_vec().unwrap();
-      data.append(&mut args);
-    
-    solana_program::instruction::Instruction {
-      program_id: crate::PERPETUALS_ID,
-      accounts,
-      data,
+    pub fn instruction(
+        &self,
+        args: ClosePositionRequestInstructionArgs,
+    ) -> solana_program::instruction::Instruction {
+        self.instruction_with_remaining_accounts(args, &[])
     }
-  }
+    #[allow(clippy::vec_init_then_push)]
+    pub fn instruction_with_remaining_accounts(
+        &self,
+        args: ClosePositionRequestInstructionArgs,
+        remaining_accounts: &[solana_program::instruction::AccountMeta],
+    ) -> solana_program::instruction::Instruction {
+        let mut accounts = Vec::with_capacity(10 + remaining_accounts.len());
+        if let Some(keeper) = self.keeper {
+            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+                keeper, true,
+            ));
+        } else {
+            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+                PERPETUALS_ID,
+                false,
+            ));
+        }
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            self.owner, false,
+        ));
+        if let Some(owner_ata) = self.owner_ata {
+            accounts.push(solana_program::instruction::AccountMeta::new(
+                owner_ata, false,
+            ));
+        } else {
+            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+                PERPETUALS_ID,
+                false,
+            ));
+        }
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            self.pool, false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            self.position_request,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            self.position_request_ata,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            self.position,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            self.token_program,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            self.event_authority,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            self.program,
+            false,
+        ));
+        accounts.extend_from_slice(remaining_accounts);
+        let mut data = ClosePositionRequestInstructionData::new()
+            .try_to_vec()
+            .unwrap();
+        let mut args = args.try_to_vec().unwrap();
+        data.append(&mut args);
+
+        solana_program::instruction::Instruction {
+            program_id: PERPETUALS_ID,
+            accounts,
+            data,
+        }
+    }
 }
 
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct ClosePositionRequestInstructionData {
-            discriminator: [u8; 8],
-            }
+    discriminator: [u8; 8],
+}
 
 impl ClosePositionRequestInstructionData {
-  pub fn new() -> Self {
-    Self {
-                        discriminator: [40, 105, 217, 188, 220, 45, 109, 110],
-                                }
-  }
+    pub fn new() -> Self {
+        Self {
+            discriminator: [40, 105, 217, 188, 220, 45, 109, 110],
+        }
+    }
 }
 
 impl Default for ClosePositionRequestInstructionData {
-  fn default() -> Self {
-    Self::new()
-  }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct ClosePositionRequestInstructionArgs {
-                  pub params: ClosePositionRequestParams,
-      }
-
+    pub params: ClosePositionRequestParams,
+}
 
 /// Instruction builder for `ClosePositionRequest`.
 ///
 /// ### Accounts:
 ///
-                      ///   0. `[signer, optional]` keeper
-                ///   1. `[writable]` owner
-                      ///   2. `[writable, optional]` owner_ata
-                ///   3. `[writable]` pool
-                ///   4. `[writable]` position_request
-                ///   5. `[writable]` position_request_ata
-          ///   6. `[]` position
-          ///   7. `[]` token_program
-          ///   8. `[]` event_authority
-          ///   9. `[]` program
+///   0. `[signer, optional]` keeper
+///   1. `[writable]` owner
+///   2. `[writable, optional]` owner_ata
+///   3. `[writable]` pool
+///   4. `[writable]` position_request
+///   5. `[writable]` position_request_ata
+///   6. `[]` position
+///   7. `[]` token_program
+///   8. `[]` event_authority
+///   9. `[]` program
 #[derive(Clone, Debug, Default)]
 pub struct ClosePositionRequestBuilder {
-            keeper: Option<solana_program::pubkey::Pubkey>,
-                owner: Option<solana_program::pubkey::Pubkey>,
-                owner_ata: Option<solana_program::pubkey::Pubkey>,
-                pool: Option<solana_program::pubkey::Pubkey>,
-                position_request: Option<solana_program::pubkey::Pubkey>,
-                position_request_ata: Option<solana_program::pubkey::Pubkey>,
-                position: Option<solana_program::pubkey::Pubkey>,
-                token_program: Option<solana_program::pubkey::Pubkey>,
-                event_authority: Option<solana_program::pubkey::Pubkey>,
-                program: Option<solana_program::pubkey::Pubkey>,
-                        params: Option<ClosePositionRequestParams>,
-        __remaining_accounts: Vec<solana_program::instruction::AccountMeta>,
+    keeper: Option<solana_program::pubkey::Pubkey>,
+    owner: Option<solana_program::pubkey::Pubkey>,
+    owner_ata: Option<solana_program::pubkey::Pubkey>,
+    pool: Option<solana_program::pubkey::Pubkey>,
+    position_request: Option<solana_program::pubkey::Pubkey>,
+    position_request_ata: Option<solana_program::pubkey::Pubkey>,
+    position: Option<solana_program::pubkey::Pubkey>,
+    token_program: Option<solana_program::pubkey::Pubkey>,
+    event_authority: Option<solana_program::pubkey::Pubkey>,
+    program: Option<solana_program::pubkey::Pubkey>,
+    params: Option<ClosePositionRequestParams>,
+    __remaining_accounts: Vec<solana_program::instruction::AccountMeta>,
 }
 
 impl ClosePositionRequestBuilder {
-  pub fn new() -> Self {
-    Self::default()
-  }
-            /// `[optional account]`
-#[inline(always)]
+    pub fn new() -> Self {
+        Self::default()
+    }
+    /// `[optional account]`
+    #[inline(always)]
     pub fn keeper(&mut self, keeper: Option<solana_program::pubkey::Pubkey>) -> &mut Self {
-                        self.keeper = keeper;
-                    self
+        self.keeper = keeper;
+        self
     }
-            #[inline(always)]
+    #[inline(always)]
     pub fn owner(&mut self, owner: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.owner = Some(owner);
-                    self
+        self.owner = Some(owner);
+        self
     }
-            /// `[optional account]`
-#[inline(always)]
+    /// `[optional account]`
+    #[inline(always)]
     pub fn owner_ata(&mut self, owner_ata: Option<solana_program::pubkey::Pubkey>) -> &mut Self {
-                        self.owner_ata = owner_ata;
-                    self
+        self.owner_ata = owner_ata;
+        self
     }
-            #[inline(always)]
+    #[inline(always)]
     pub fn pool(&mut self, pool: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.pool = Some(pool);
-                    self
+        self.pool = Some(pool);
+        self
     }
-            #[inline(always)]
-    pub fn position_request(&mut self, position_request: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.position_request = Some(position_request);
-                    self
+    #[inline(always)]
+    pub fn position_request(
+        &mut self,
+        position_request: solana_program::pubkey::Pubkey,
+    ) -> &mut Self {
+        self.position_request = Some(position_request);
+        self
     }
-            #[inline(always)]
-    pub fn position_request_ata(&mut self, position_request_ata: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.position_request_ata = Some(position_request_ata);
-                    self
+    #[inline(always)]
+    pub fn position_request_ata(
+        &mut self,
+        position_request_ata: solana_program::pubkey::Pubkey,
+    ) -> &mut Self {
+        self.position_request_ata = Some(position_request_ata);
+        self
     }
-            #[inline(always)]
+    #[inline(always)]
     pub fn position(&mut self, position: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.position = Some(position);
-                    self
+        self.position = Some(position);
+        self
     }
-            #[inline(always)]
+    #[inline(always)]
     pub fn token_program(&mut self, token_program: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.token_program = Some(token_program);
-                    self
+        self.token_program = Some(token_program);
+        self
     }
-            #[inline(always)]
-    pub fn event_authority(&mut self, event_authority: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.event_authority = Some(event_authority);
-                    self
+    #[inline(always)]
+    pub fn event_authority(
+        &mut self,
+        event_authority: solana_program::pubkey::Pubkey,
+    ) -> &mut Self {
+        self.event_authority = Some(event_authority);
+        self
     }
-            #[inline(always)]
+    #[inline(always)]
     pub fn program(&mut self, program: solana_program::pubkey::Pubkey) -> &mut Self {
-                        self.program = Some(program);
-                    self
+        self.program = Some(program);
+        self
     }
-                    #[inline(always)]
-      pub fn params(&mut self, params: ClosePositionRequestParams) -> &mut Self {
+    #[inline(always)]
+    pub fn params(&mut self, params: ClosePositionRequestParams) -> &mut Self {
         self.params = Some(params);
         self
-      }
-        /// Add an aditional account to the instruction.
-  #[inline(always)]
-  pub fn add_remaining_account(&mut self, account: solana_program::instruction::AccountMeta) -> &mut Self {
-    self.__remaining_accounts.push(account);
-    self
-  }
-  /// Add additional accounts to the instruction.
-  #[inline(always)]
-  pub fn add_remaining_accounts(&mut self, accounts: &[solana_program::instruction::AccountMeta]) -> &mut Self {
-    self.__remaining_accounts.extend_from_slice(accounts);
-    self
-  }
-  #[allow(clippy::clone_on_copy)]
-  pub fn instruction(&self) -> solana_program::instruction::Instruction {
-    let accounts = ClosePositionRequest {
-                              keeper: self.keeper,
-                                        owner: self.owner.expect("owner is not set"),
-                                        owner_ata: self.owner_ata,
-                                        pool: self.pool.expect("pool is not set"),
-                                        position_request: self.position_request.expect("position_request is not set"),
-                                        position_request_ata: self.position_request_ata.expect("position_request_ata is not set"),
-                                        position: self.position.expect("position is not set"),
-                                        token_program: self.token_program.expect("token_program is not set"),
-                                        event_authority: self.event_authority.expect("event_authority is not set"),
-                                        program: self.program.expect("program is not set"),
-                      };
-          let args = ClosePositionRequestInstructionArgs {
-                                                              params: self.params.clone().expect("params is not set"),
-                                    };
-    
-    accounts.instruction_with_remaining_accounts(args, &self.__remaining_accounts)
-  }
+    }
+    /// Add an aditional account to the instruction.
+    #[inline(always)]
+    pub fn add_remaining_account(
+        &mut self,
+        account: solana_program::instruction::AccountMeta,
+    ) -> &mut Self {
+        self.__remaining_accounts.push(account);
+        self
+    }
+    /// Add additional accounts to the instruction.
+    #[inline(always)]
+    pub fn add_remaining_accounts(
+        &mut self,
+        accounts: &[solana_program::instruction::AccountMeta],
+    ) -> &mut Self {
+        self.__remaining_accounts.extend_from_slice(accounts);
+        self
+    }
+    #[allow(clippy::clone_on_copy)]
+    pub fn instruction(&self) -> solana_program::instruction::Instruction {
+        let accounts = ClosePositionRequest {
+            keeper: self.keeper,
+            owner: self.owner.expect("owner is not set"),
+            owner_ata: self.owner_ata,
+            pool: self.pool.expect("pool is not set"),
+            position_request: self.position_request.expect("position_request is not set"),
+            position_request_ata: self
+                .position_request_ata
+                .expect("position_request_ata is not set"),
+            position: self.position.expect("position is not set"),
+            token_program: self.token_program.expect("token_program is not set"),
+            event_authority: self.event_authority.expect("event_authority is not set"),
+            program: self.program.expect("program is not set"),
+        };
+        let args = ClosePositionRequestInstructionArgs {
+            params: self.params.clone().expect("params is not set"),
+        };
+
+        accounts.instruction_with_remaining_accounts(args, &self.__remaining_accounts)
+    }
 }
 
-  /// `close_position_request` CPI accounts.
-  pub struct ClosePositionRequestCpiAccounts<'a, 'b> {
-          
-                    
-              pub keeper: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                
-                    
-              pub owner: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub owner_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                
-                    
-              pub pool: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub position_request: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub position_request_ata: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub position: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub token_program: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub event_authority: &'b solana_program::account_info::AccountInfo<'a>,
-                
-                    
-              pub program: &'b solana_program::account_info::AccountInfo<'a>,
-            }
+/// `close_position_request` CPI accounts.
+pub struct ClosePositionRequestCpiAccounts<'a, 'b> {
+    pub keeper: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+
+    pub owner: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub owner_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+
+    pub pool: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub position_request: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub position_request_ata: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub position: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub token_program: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub event_authority: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub program: &'b solana_program::account_info::AccountInfo<'a>,
+}
 
 /// `close_position_request` CPI instruction.
 pub struct ClosePositionRequestCpi<'a, 'b> {
-  /// The program to invoke.
-  pub __program: &'b solana_program::account_info::AccountInfo<'a>,
-      
-              
-          pub keeper: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-          
-              
-          pub owner: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub owner_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-          
-              
-          pub pool: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub position_request: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub position_request_ata: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub position: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub token_program: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub event_authority: &'b solana_program::account_info::AccountInfo<'a>,
-          
-              
-          pub program: &'b solana_program::account_info::AccountInfo<'a>,
-            /// The arguments for the instruction.
+    /// The program to invoke.
+    pub __program: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub keeper: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+
+    pub owner: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub owner_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+
+    pub pool: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub position_request: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub position_request_ata: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub position: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub token_program: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub event_authority: &'b solana_program::account_info::AccountInfo<'a>,
+
+    pub program: &'b solana_program::account_info::AccountInfo<'a>,
+    /// The arguments for the instruction.
     pub __args: ClosePositionRequestInstructionArgs,
-  }
+}
 
 impl<'a, 'b> ClosePositionRequestCpi<'a, 'b> {
-  pub fn new(
-    program: &'b solana_program::account_info::AccountInfo<'a>,
-          accounts: ClosePositionRequestCpiAccounts<'a, 'b>,
-              args: ClosePositionRequestInstructionArgs,
-      ) -> Self {
-    Self {
-      __program: program,
-              keeper: accounts.keeper,
-              owner: accounts.owner,
-              owner_ata: accounts.owner_ata,
-              pool: accounts.pool,
-              position_request: accounts.position_request,
-              position_request_ata: accounts.position_request_ata,
-              position: accounts.position,
-              token_program: accounts.token_program,
-              event_authority: accounts.event_authority,
-              program: accounts.program,
-                    __args: args,
-          }
-  }
-  #[inline(always)]
-  pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed_with_remaining_accounts(&[], &[])
-  }
-  #[inline(always)]
-  pub fn invoke_with_remaining_accounts(&self, remaining_accounts: &[(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)]) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed_with_remaining_accounts(&[], remaining_accounts)
-  }
-  #[inline(always)]
-  pub fn invoke_signed(&self, signers_seeds: &[&[&[u8]]]) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed_with_remaining_accounts(signers_seeds, &[])
-  }
-  #[allow(clippy::clone_on_copy)]
-  #[allow(clippy::vec_init_then_push)]
-  pub fn invoke_signed_with_remaining_accounts(
-    &self,
-    signers_seeds: &[&[&[u8]]],
-    remaining_accounts: &[(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)]
-  ) -> solana_program::entrypoint::ProgramResult {
-    let mut accounts = Vec::with_capacity(10 + remaining_accounts.len());
-                            if let Some(keeper) = self.keeper {
-            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-              *keeper.key,
-              true,
-            ));
-          } else {
-            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-              crate::PERPETUALS_ID,
-              false,
-            ));
-          }
-                                          accounts.push(solana_program::instruction::AccountMeta::new(
-            *self.owner.key,
-            false
-          ));
-                                          if let Some(owner_ata) = self.owner_ata {
-            accounts.push(solana_program::instruction::AccountMeta::new(
-              *owner_ata.key,
-              false,
-            ));
-          } else {
-            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-              crate::PERPETUALS_ID,
-              false,
-            ));
-          }
-                                          accounts.push(solana_program::instruction::AccountMeta::new(
-            *self.pool.key,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new(
-            *self.position_request.key,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new(
-            *self.position_request_ata.key,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            *self.position.key,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            *self.token_program.key,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            *self.event_authority.key,
-            false
-          ));
-                                          accounts.push(solana_program::instruction::AccountMeta::new_readonly(
-            *self.program.key,
-            false
-          ));
-                      remaining_accounts.iter().for_each(|remaining_account| {
-      accounts.push(solana_program::instruction::AccountMeta {
-          pubkey: *remaining_account.0.key,
-          is_signer: remaining_account.1,
-          is_writable: remaining_account.2,
-      })
-    });
-    let mut data = ClosePositionRequestInstructionData::new().try_to_vec().unwrap();
-          let mut args = self.__args.try_to_vec().unwrap();
-      data.append(&mut args);
-    
-    let instruction = solana_program::instruction::Instruction {
-      program_id: crate::PERPETUALS_ID,
-      accounts,
-      data,
-    };
-    let mut account_infos = Vec::with_capacity(10 + 1 + remaining_accounts.len());
-    account_infos.push(self.__program.clone());
-                  if let Some(keeper) = self.keeper {
-          account_infos.push(keeper.clone());
+    pub fn new(
+        program: &'b solana_program::account_info::AccountInfo<'a>,
+        accounts: ClosePositionRequestCpiAccounts<'a, 'b>,
+        args: ClosePositionRequestInstructionArgs,
+    ) -> Self {
+        Self {
+            __program: program,
+            keeper: accounts.keeper,
+            owner: accounts.owner,
+            owner_ata: accounts.owner_ata,
+            pool: accounts.pool,
+            position_request: accounts.position_request,
+            position_request_ata: accounts.position_request_ata,
+            position: accounts.position,
+            token_program: accounts.token_program,
+            event_authority: accounts.event_authority,
+            program: accounts.program,
+            __args: args,
         }
-                        account_infos.push(self.owner.clone());
-                        if let Some(owner_ata) = self.owner_ata {
-          account_infos.push(owner_ata.clone());
-        }
-                        account_infos.push(self.pool.clone());
-                        account_infos.push(self.position_request.clone());
-                        account_infos.push(self.position_request_ata.clone());
-                        account_infos.push(self.position.clone());
-                        account_infos.push(self.token_program.clone());
-                        account_infos.push(self.event_authority.clone());
-                        account_infos.push(self.program.clone());
-              remaining_accounts.iter().for_each(|remaining_account| account_infos.push(remaining_account.0.clone()));
-
-    if signers_seeds.is_empty() {
-      solana_program::program::invoke(&instruction, &account_infos)
-    } else {
-      solana_program::program::invoke_signed(&instruction, &account_infos, signers_seeds)
     }
-  }
+    #[inline(always)]
+    pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed_with_remaining_accounts(&[], &[])
+    }
+    #[inline(always)]
+    pub fn invoke_with_remaining_accounts(
+        &self,
+        remaining_accounts: &[(
+            &'b solana_program::account_info::AccountInfo<'a>,
+            bool,
+            bool,
+        )],
+    ) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed_with_remaining_accounts(&[], remaining_accounts)
+    }
+    #[inline(always)]
+    pub fn invoke_signed(
+        &self,
+        signers_seeds: &[&[&[u8]]],
+    ) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed_with_remaining_accounts(signers_seeds, &[])
+    }
+    #[allow(clippy::clone_on_copy)]
+    #[allow(clippy::vec_init_then_push)]
+    pub fn invoke_signed_with_remaining_accounts(
+        &self,
+        signers_seeds: &[&[&[u8]]],
+        remaining_accounts: &[(
+            &'b solana_program::account_info::AccountInfo<'a>,
+            bool,
+            bool,
+        )],
+    ) -> solana_program::entrypoint::ProgramResult {
+        let mut accounts = Vec::with_capacity(10 + remaining_accounts.len());
+        if let Some(keeper) = self.keeper {
+            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+                *keeper.key,
+                true,
+            ));
+        } else {
+            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+                PERPETUALS_ID,
+                false,
+            ));
+        }
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            *self.owner.key,
+            false,
+        ));
+        if let Some(owner_ata) = self.owner_ata {
+            accounts.push(solana_program::instruction::AccountMeta::new(
+                *owner_ata.key,
+                false,
+            ));
+        } else {
+            accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+                PERPETUALS_ID,
+                false,
+            ));
+        }
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            *self.pool.key,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            *self.position_request.key,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new(
+            *self.position_request_ata.key,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            *self.position.key,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            *self.token_program.key,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            *self.event_authority.key,
+            false,
+        ));
+        accounts.push(solana_program::instruction::AccountMeta::new_readonly(
+            *self.program.key,
+            false,
+        ));
+        remaining_accounts.iter().for_each(|remaining_account| {
+            accounts.push(solana_program::instruction::AccountMeta {
+                pubkey: *remaining_account.0.key,
+                is_signer: remaining_account.1,
+                is_writable: remaining_account.2,
+            })
+        });
+        let mut data = ClosePositionRequestInstructionData::new()
+            .try_to_vec()
+            .unwrap();
+        let mut args = self.__args.try_to_vec().unwrap();
+        data.append(&mut args);
+
+        let instruction = solana_program::instruction::Instruction {
+            program_id: PERPETUALS_ID,
+            accounts,
+            data,
+        };
+        let mut account_infos = Vec::with_capacity(10 + 1 + remaining_accounts.len());
+        account_infos.push(self.__program.clone());
+        if let Some(keeper) = self.keeper {
+            account_infos.push(keeper.clone());
+        }
+        account_infos.push(self.owner.clone());
+        if let Some(owner_ata) = self.owner_ata {
+            account_infos.push(owner_ata.clone());
+        }
+        account_infos.push(self.pool.clone());
+        account_infos.push(self.position_request.clone());
+        account_infos.push(self.position_request_ata.clone());
+        account_infos.push(self.position.clone());
+        account_infos.push(self.token_program.clone());
+        account_infos.push(self.event_authority.clone());
+        account_infos.push(self.program.clone());
+        remaining_accounts
+            .iter()
+            .for_each(|remaining_account| account_infos.push(remaining_account.0.clone()));
+
+        if signers_seeds.is_empty() {
+            solana_program::program::invoke(&instruction, &account_infos)
+        } else {
+            solana_program::program::invoke_signed(&instruction, &account_infos, signers_seeds)
+        }
+    }
 }
 
 /// Instruction builder for `ClosePositionRequest` via CPI.
 ///
 /// ### Accounts:
 ///
-                      ///   0. `[signer, optional]` keeper
-                ///   1. `[writable]` owner
-                      ///   2. `[writable, optional]` owner_ata
-                ///   3. `[writable]` pool
-                ///   4. `[writable]` position_request
-                ///   5. `[writable]` position_request_ata
-          ///   6. `[]` position
-          ///   7. `[]` token_program
-          ///   8. `[]` event_authority
-          ///   9. `[]` program
+///   0. `[signer, optional]` keeper
+///   1. `[writable]` owner
+///   2. `[writable, optional]` owner_ata
+///   3. `[writable]` pool
+///   4. `[writable]` position_request
+///   5. `[writable]` position_request_ata
+///   6. `[]` position
+///   7. `[]` token_program
+///   8. `[]` event_authority
+///   9. `[]` program
 #[derive(Clone, Debug)]
 pub struct ClosePositionRequestCpiBuilder<'a, 'b> {
-  instruction: Box<ClosePositionRequestCpiBuilderInstruction<'a, 'b>>,
+    instruction: Box<ClosePositionRequestCpiBuilderInstruction<'a, 'b>>,
 }
 
 impl<'a, 'b> ClosePositionRequestCpiBuilder<'a, 'b> {
-  pub fn new(program: &'b solana_program::account_info::AccountInfo<'a>) -> Self {
-    let instruction = Box::new(ClosePositionRequestCpiBuilderInstruction {
-      __program: program,
-              keeper: None,
-              owner: None,
-              owner_ata: None,
-              pool: None,
-              position_request: None,
-              position_request_ata: None,
-              position: None,
-              token_program: None,
-              event_authority: None,
-              program: None,
-                                            params: None,
-                    __remaining_accounts: Vec::new(),
-    });
-    Self { instruction }
-  }
-      /// `[optional account]`
-#[inline(always)]
-    pub fn keeper(&mut self, keeper: Option<&'b solana_program::account_info::AccountInfo<'a>>) -> &mut Self {
-                        self.instruction.keeper = keeper;
-                    self
+    pub fn new(program: &'b solana_program::account_info::AccountInfo<'a>) -> Self {
+        let instruction = Box::new(ClosePositionRequestCpiBuilderInstruction {
+            __program: program,
+            keeper: None,
+            owner: None,
+            owner_ata: None,
+            pool: None,
+            position_request: None,
+            position_request_ata: None,
+            position: None,
+            token_program: None,
+            event_authority: None,
+            program: None,
+            params: None,
+            __remaining_accounts: Vec::new(),
+        });
+        Self { instruction }
     }
-      #[inline(always)]
+    /// `[optional account]`
+    #[inline(always)]
+    pub fn keeper(
+        &mut self,
+        keeper: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    ) -> &mut Self {
+        self.instruction.keeper = keeper;
+        self
+    }
+    #[inline(always)]
     pub fn owner(&mut self, owner: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.owner = Some(owner);
-                    self
+        self.instruction.owner = Some(owner);
+        self
     }
-      /// `[optional account]`
-#[inline(always)]
-    pub fn owner_ata(&mut self, owner_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>) -> &mut Self {
-                        self.instruction.owner_ata = owner_ata;
-                    self
+    /// `[optional account]`
+    #[inline(always)]
+    pub fn owner_ata(
+        &mut self,
+        owner_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    ) -> &mut Self {
+        self.instruction.owner_ata = owner_ata;
+        self
     }
-      #[inline(always)]
+    #[inline(always)]
     pub fn pool(&mut self, pool: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.pool = Some(pool);
-                    self
+        self.instruction.pool = Some(pool);
+        self
     }
-      #[inline(always)]
-    pub fn position_request(&mut self, position_request: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.position_request = Some(position_request);
-                    self
+    #[inline(always)]
+    pub fn position_request(
+        &mut self,
+        position_request: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.position_request = Some(position_request);
+        self
     }
-      #[inline(always)]
-    pub fn position_request_ata(&mut self, position_request_ata: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.position_request_ata = Some(position_request_ata);
-                    self
+    #[inline(always)]
+    pub fn position_request_ata(
+        &mut self,
+        position_request_ata: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.position_request_ata = Some(position_request_ata);
+        self
     }
-      #[inline(always)]
-    pub fn position(&mut self, position: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.position = Some(position);
-                    self
+    #[inline(always)]
+    pub fn position(
+        &mut self,
+        position: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.position = Some(position);
+        self
     }
-      #[inline(always)]
-    pub fn token_program(&mut self, token_program: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.token_program = Some(token_program);
-                    self
+    #[inline(always)]
+    pub fn token_program(
+        &mut self,
+        token_program: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.token_program = Some(token_program);
+        self
     }
-      #[inline(always)]
-    pub fn event_authority(&mut self, event_authority: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.event_authority = Some(event_authority);
-                    self
+    #[inline(always)]
+    pub fn event_authority(
+        &mut self,
+        event_authority: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.event_authority = Some(event_authority);
+        self
     }
-      #[inline(always)]
-    pub fn program(&mut self, program: &'b solana_program::account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.program = Some(program);
-                    self
+    #[inline(always)]
+    pub fn program(
+        &mut self,
+        program: &'b solana_program::account_info::AccountInfo<'a>,
+    ) -> &mut Self {
+        self.instruction.program = Some(program);
+        self
     }
-                    #[inline(always)]
-      pub fn params(&mut self, params: ClosePositionRequestParams) -> &mut Self {
+    #[inline(always)]
+    pub fn params(&mut self, params: ClosePositionRequestParams) -> &mut Self {
         self.instruction.params = Some(params);
         self
-      }
-        /// Add an additional account to the instruction.
-  #[inline(always)]
-  pub fn add_remaining_account(&mut self, account: &'b solana_program::account_info::AccountInfo<'a>, is_writable: bool, is_signer: bool) -> &mut Self {
-    self.instruction.__remaining_accounts.push((account, is_writable, is_signer));
-    self
-  }
-  /// Add additional accounts to the instruction.
-  ///
-  /// Each account is represented by a tuple of the `AccountInfo`, a `bool` indicating whether the account is writable or not,
-  /// and a `bool` indicating whether the account is a signer or not.
-  #[inline(always)]
-  pub fn add_remaining_accounts(&mut self, accounts: &[(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)]) -> &mut Self {
-    self.instruction.__remaining_accounts.extend_from_slice(accounts);
-    self
-  }
-  #[inline(always)]
-  pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
-    self.invoke_signed(&[])
-  }
-  #[allow(clippy::clone_on_copy)]
-  #[allow(clippy::vec_init_then_push)]
-  pub fn invoke_signed(&self, signers_seeds: &[&[&[u8]]]) -> solana_program::entrypoint::ProgramResult {
-          let args = ClosePositionRequestInstructionArgs {
-                                                              params: self.instruction.params.clone().expect("params is not set"),
-                                    };
+    }
+    /// Add an additional account to the instruction.
+    #[inline(always)]
+    pub fn add_remaining_account(
+        &mut self,
+        account: &'b solana_program::account_info::AccountInfo<'a>,
+        is_writable: bool,
+        is_signer: bool,
+    ) -> &mut Self {
+        self.instruction
+            .__remaining_accounts
+            .push((account, is_writable, is_signer));
+        self
+    }
+    /// Add additional accounts to the instruction.
+    ///
+    /// Each account is represented by a tuple of the `AccountInfo`, a `bool` indicating whether the account is writable or not,
+    /// and a `bool` indicating whether the account is a signer or not.
+    #[inline(always)]
+    pub fn add_remaining_accounts(
+        &mut self,
+        accounts: &[(
+            &'b solana_program::account_info::AccountInfo<'a>,
+            bool,
+            bool,
+        )],
+    ) -> &mut Self {
+        self.instruction
+            .__remaining_accounts
+            .extend_from_slice(accounts);
+        self
+    }
+    #[inline(always)]
+    pub fn invoke(&self) -> solana_program::entrypoint::ProgramResult {
+        self.invoke_signed(&[])
+    }
+    #[allow(clippy::clone_on_copy)]
+    #[allow(clippy::vec_init_then_push)]
+    pub fn invoke_signed(
+        &self,
+        signers_seeds: &[&[&[u8]]],
+    ) -> solana_program::entrypoint::ProgramResult {
+        let args = ClosePositionRequestInstructionArgs {
+            params: self.instruction.params.clone().expect("params is not set"),
+        };
         let instruction = ClosePositionRequestCpi {
-        __program: self.instruction.__program,
-                  
-          keeper: self.instruction.keeper,
-                  
-          owner: self.instruction.owner.expect("owner is not set"),
-                  
-          owner_ata: self.instruction.owner_ata,
-                  
-          pool: self.instruction.pool.expect("pool is not set"),
-                  
-          position_request: self.instruction.position_request.expect("position_request is not set"),
-                  
-          position_request_ata: self.instruction.position_request_ata.expect("position_request_ata is not set"),
-                  
-          position: self.instruction.position.expect("position is not set"),
-                  
-          token_program: self.instruction.token_program.expect("token_program is not set"),
-                  
-          event_authority: self.instruction.event_authority.expect("event_authority is not set"),
-                  
-          program: self.instruction.program.expect("program is not set"),
-                          __args: args,
-            };
-    instruction.invoke_signed_with_remaining_accounts(signers_seeds, &self.instruction.__remaining_accounts)
-  }
+            __program: self.instruction.__program,
+
+            keeper: self.instruction.keeper,
+
+            owner: self.instruction.owner.expect("owner is not set"),
+
+            owner_ata: self.instruction.owner_ata,
+
+            pool: self.instruction.pool.expect("pool is not set"),
+
+            position_request: self
+                .instruction
+                .position_request
+                .expect("position_request is not set"),
+
+            position_request_ata: self
+                .instruction
+                .position_request_ata
+                .expect("position_request_ata is not set"),
+
+            position: self.instruction.position.expect("position is not set"),
+
+            token_program: self
+                .instruction
+                .token_program
+                .expect("token_program is not set"),
+
+            event_authority: self
+                .instruction
+                .event_authority
+                .expect("event_authority is not set"),
+
+            program: self.instruction.program.expect("program is not set"),
+            __args: args,
+        };
+        instruction.invoke_signed_with_remaining_accounts(
+            signers_seeds,
+            &self.instruction.__remaining_accounts,
+        )
+    }
 }
 
 #[derive(Clone, Debug)]
 struct ClosePositionRequestCpiBuilderInstruction<'a, 'b> {
-  __program: &'b solana_program::account_info::AccountInfo<'a>,
-            keeper: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                owner: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                owner_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                pool: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                position_request: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                position_request_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                position: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                token_program: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                event_authority: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                program: Option<&'b solana_program::account_info::AccountInfo<'a>>,
-                        params: Option<ClosePositionRequestParams>,
-        /// Additional instruction accounts `(AccountInfo, is_writable, is_signer)`.
-  __remaining_accounts: Vec<(&'b solana_program::account_info::AccountInfo<'a>, bool, bool)>,
+    __program: &'b solana_program::account_info::AccountInfo<'a>,
+    keeper: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    owner: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    owner_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    pool: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    position_request: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    position_request_ata: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    position: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    token_program: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    event_authority: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    program: Option<&'b solana_program::account_info::AccountInfo<'a>>,
+    params: Option<ClosePositionRequestParams>,
+    /// Additional instruction accounts `(AccountInfo, is_writable, is_signer)`.
+    __remaining_accounts: Vec<(
+        &'b solana_program::account_info::AccountInfo<'a>,
+        bool,
+        bool,
+    )>,
 }
-

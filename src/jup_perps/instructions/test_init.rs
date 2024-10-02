@@ -7,7 +7,8 @@
 
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
-use crate::generated::types::TestInitParams;
+use crate::jup_perps::types::TestInitParams;
+use crate::jup_perps::programs::PERPETUALS_ID;
 
 /// Accounts.
 pub struct TestInit {
@@ -68,7 +69,7 @@ impl TestInit {
       data.append(&mut args);
     
     solana_program::instruction::Instruction {
-      program_id: crate::PERPETUALS_ID,
+      program_id: PERPETUALS_ID,
       accounts,
       data,
     }
@@ -313,7 +314,7 @@ impl<'a, 'b> TestInitCpi<'a, 'b> {
       data.append(&mut args);
     
     let instruction = solana_program::instruction::Instruction {
-      program_id: crate::PERPETUALS_ID,
+      program_id: PERPETUALS_ID,
       accounts,
       data,
     };
