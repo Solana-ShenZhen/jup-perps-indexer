@@ -5,15 +5,13 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
-use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
+use borsh::BorshSerialize;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct AddLiquidityParams {
-pub token_amount_in: u64,
-pub min_lp_amount_out: u64,
-pub token_amount_pre_swap: Option<u64>,
+    pub token_amount_in: u64,
+    pub min_lp_amount_out: u64,
+    pub token_amount_pre_swap: Option<u64>,
 }
-
-

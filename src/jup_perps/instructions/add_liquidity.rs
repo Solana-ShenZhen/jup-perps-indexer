@@ -5,10 +5,10 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
+use crate::jup_perps::programs::PERPETUALS_ID;
 use crate::jup_perps::types::AddLiquidityParams;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
-use crate::jup_perps::programs::PERPETUALS_ID;
 
 /// Accounts.
 pub struct AddLiquidity {

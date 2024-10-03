@@ -10,6 +10,7 @@ use crate::jup_perps::types::Limit;
 use crate::jup_perps::types::PoolApr;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
+use solana_program::pubkey;
 use solana_program::pubkey::Pubkey;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
@@ -33,6 +34,8 @@ pub struct Pool {
 }
 
 impl Pool {
+    pub const ADDRESS: Pubkey = pubkey!("5BUwFW4nRbftYTDMbgxykoFWqWHPzahFSNAaaaJtVKsq");
+
     #[inline(always)]
     pub fn from_bytes(data: &[u8]) -> Result<Self, std::io::Error> {
         let mut data = data;

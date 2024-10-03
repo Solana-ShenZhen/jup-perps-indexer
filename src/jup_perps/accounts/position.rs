@@ -5,10 +5,13 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
+use crate::jup_perps::programs::PERPETUALS_ID;
 use crate::jup_perps::types::Side;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use solana_program::pubkey::Pubkey;
+
+use super::Pool;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -47,6 +50,54 @@ pub struct Position {
 }
 
 impl Position {
+    pub fn create_pda(
+        custody: Pubkey,
+        collateral_custody: Pubkey,
+        wallet_address: Pubkey,
+        side: Side,
+        bump: u8,
+    ) -> Result<solana_program::pubkey::Pubkey, solana_program::pubkey::PubkeyError> {
+        solana_program::pubkey::Pubkey::create_program_address(
+            &[
+                b"position",
+                wallet_address.as_ref(),
+                Pool::ADDRESS.as_ref(),
+                custody.as_ref(),
+                collateral_custody.as_ref(),
+                &[match side {
+                    Side::Long => 1,
+                    Side::Short => 2,
+                    _ => unreachable!("Side::None should not be used in create_pda"),
+                }],
+                &[bump],
+            ],
+            &PERPETUALS_ID,
+        )
+    }
+
+    pub fn find_pda(
+        custody: Pubkey,
+        collateral_custody: Pubkey,
+        wallet_address: Pubkey,
+        side: Side,
+    ) -> (solana_program::pubkey::Pubkey, u8) {
+        solana_program::pubkey::Pubkey::find_program_address(
+            &[
+                b"position",
+                wallet_address.as_ref(),
+                Pool::ADDRESS.as_ref(),
+                custody.as_ref(),
+                collateral_custody.as_ref(),
+                &[match side {
+                    Side::Long => 1,
+                    Side::Short => 2,
+                    _ => unreachable!("Side::None should not be used in find_pda"),
+                }],
+            ],
+            &PERPETUALS_ID,
+        )
+    }
+
     #[inline(always)]
     pub fn from_bytes(data: &[u8]) -> Result<Self, std::io::Error> {
         let mut data = data;

@@ -5,19 +5,17 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
-use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
+use borsh::BorshSerialize;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct InitParams {
-pub allow_swap: bool,
-pub allow_add_liquidity: bool,
-pub allow_remove_liquidity: bool,
-pub allow_increase_position: bool,
-pub allow_decrease_position: bool,
-pub allow_collateral_withdrawal: bool,
-pub allow_liquidate_position: bool,
+    pub allow_swap: bool,
+    pub allow_add_liquidity: bool,
+    pub allow_remove_liquidity: bool,
+    pub allow_increase_position: bool,
+    pub allow_decrease_position: bool,
+    pub allow_collateral_withdrawal: bool,
+    pub allow_liquidate_position: bool,
 }
-
-

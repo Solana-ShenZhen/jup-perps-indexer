@@ -6,20 +6,18 @@
 //!
 
 use crate::jup_perps::types::OracleParams;
-use crate::jup_perps::types::PricingParams;
 use crate::jup_perps::types::Permissions;
-use borsh::BorshSerialize;
+use crate::jup_perps::types::PricingParams;
 use borsh::BorshDeserialize;
+use borsh::BorshSerialize;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct AddCustodyParams {
-pub is_stable: bool,
-pub oracle: OracleParams,
-pub pricing: PricingParams,
-pub permissions: Permissions,
-pub hourly_funding_dbps: u64,
-pub target_ratio_bps: u64,
+    pub is_stable: bool,
+    pub oracle: OracleParams,
+    pub pricing: PricingParams,
+    pub permissions: Permissions,
+    pub hourly_funding_dbps: u64,
+    pub target_ratio_bps: u64,
 }
-
-
