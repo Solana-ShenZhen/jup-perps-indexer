@@ -2025,6 +2025,7 @@ dependencies = [
  "kaigan",
  "num-derive 0.3.3",
  "num-traits",
+ "rand 0.8.5",
  "serde",
  "serde_json",
  "serde_with 3.9.0",

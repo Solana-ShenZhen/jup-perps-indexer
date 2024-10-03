@@ -5,12 +5,14 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
-use crate::jup_perps::types::RequestChange;
+use crate::jup_perps::programs::PERPETUALS_ID;
 use crate::jup_perps::types::RequestType;
 use crate::jup_perps::types::Side;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
+use rand::Rng;
 use solana_program::pubkey::Pubkey;
+use solana_program::program_error::ProgramError;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -61,6 +63,56 @@ pub struct PositionRequest {
 }
 
 impl PositionRequest {
+    pub fn create_pda(
+        counter: Option<u64>,
+        position_pubkey: Pubkey,
+        request_change: RequestChange,
+    ) -> Result<solana_program::pubkey::Pubkey, solana_program::pubkey::PubkeyError> {
+        let counter = match counter {
+            Some(c) => c,
+            None => {
+                let random_value = rand::thread_rng().gen_range(0..1_000_000_000);
+                random_value as u64
+            }
+        };
+
+        let request_change_enum = match request_change {
+            RequestChange::Increase => 1u8,
+            RequestChange::Decrease => 2u8,
+        };
+
+        solana_program::pubkey::Pubkey::create_program_address(
+            &[
+                b"position_request",
+                position_pubkey.as_ref(),
+                &counter.to_le_bytes(),
+                &[request_change_enum],
+            ],
+            &PERPETUALS_ID,
+        )
+    }
+
+    pub fn find_pda(
+        position_pubkey: Pubkey,
+        counter: u64,
+        request_change: RequestChange,
+    ) -> (solana_program::pubkey::Pubkey, u8) {
+        let request_change_enum = match request_change {
+            RequestChange::Increase => 1u8,
+            RequestChange::Decrease => 2u8,
+        };
+
+        solana_program::pubkey::Pubkey::find_program_address(
+            &[
+                b"position_request",
+                &position_pubkey.as_ref(),
+                &counter.to_le_bytes(),
+                &[request_change_enum],
+            ],
+            &PERPETUALS_ID,
+        )
+    }
+
     #[inline(always)]
     pub fn from_bytes(data: &[u8]) -> Result<Self, std::io::Error> {
         let mut data = data;
@@ -70,7 +122,6 @@ impl PositionRequest {
 
 impl<'a> TryFrom<&solana_program::account_info::AccountInfo<'a>> for PositionRequest {
     type Error = std::io::Error;
-
     fn try_from(
         account_info: &solana_program::account_info::AccountInfo<'a>,
     ) -> Result<Self, Self::Error> {
@@ -102,4 +153,19 @@ impl anchor_lang::IdlBuild for PositionRequest {}
 #[cfg(feature = "anchor-idl-build")]
 impl anchor_lang::Discriminator for PositionRequest {
     const DISCRIMINATOR: [u8; 8] = [0; 8];
+}
+
+#[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
+pub enum RequestChange {
+    Increase,
+    Decrease,
+}
+
+impl RequestChange {
+    pub fn to_bytes(&self) -> Vec<u8> {
+        match self {
+            RequestChange::Increase => "increase".as_bytes().to_vec(),
+            RequestChange::Decrease => "decrease".as_bytes().to_vec(),
+        }
+    }
 }
