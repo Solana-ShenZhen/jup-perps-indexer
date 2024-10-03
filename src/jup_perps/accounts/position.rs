@@ -5,47 +5,64 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
+use super::Pool;
 use crate::jup_perps::programs::PERPETUALS_ID;
 use crate::jup_perps::types::Side;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use solana_program::pubkey::Pubkey;
 
-use super::Pool;
-
+/// Represents a trading position for a specific token in the perpetual futures market.
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Position {
     pub discriminator: [u8; 8],
+    /// The public key of the position owner.
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub owner: Pubkey,
+    /// The public key of the associated pool.
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub pool: Pubkey,
+    /// The public key of the custody account.
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub custody: Pubkey,
+    /// The public key of the collateral custody account.
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub collateral_custody: Pubkey,
+    /// Timestamp when the position was opened.
     pub open_time: i64,
+    /// Timestamp of the last update to the position.
     pub update_time: i64,
+    /// The side of the position (Long or Short).
     pub side: Side,
+    /// The price at which the position was opened.
     pub price: u64,
+    /// The size of the position in USD.
+    /// sizeUsd: The position size after leverage in USD and integer format as explained in price.
+    /// A position with sizeUsd = 0 is treated as a closed position.
     pub size_usd: u64,
+    /// The position's collateral size after fees in USD and integer format as explained in price.
+    /// This represents the actual amount of collateral backing the position after accounting for any fees.
     pub collateral_usd: u64,
+    /// The realized profit and loss in USD.
     pub realised_pnl_usd: i64,
+    /// Snapshot of cumulative interest at the time of position creation.
     pub cumulative_interest_snapshot: u128,
+    /// The amount of tokens locked in the position.
     pub locked_amount: u64,
+    /// Bump seed for PDA derivation.
     pub bump: u8,
 }
 

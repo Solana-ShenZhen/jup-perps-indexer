@@ -6,59 +6,82 @@
 //!
 
 use crate::jup_perps::programs::PERPETUALS_ID;
+use crate::jup_perps::types::RequestChange;
 use crate::jup_perps::types::RequestType;
 use crate::jup_perps::types::Side;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use rand::Rng;
 use solana_program::pubkey::Pubkey;
-use solana_program::program_error::ProgramError;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct PositionRequest {
     pub discriminator: [u8; 8],
+    /// The public key of the position owner
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub owner: Pubkey,
+    /// The public key of the associated pool
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub pool: Pubkey,
+    /// The public key of the custody account
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub custody: Pubkey,
+    /// The public key of the position account
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub position: Pubkey,
+    /// The public key of the token mint. For opening positions and collateral deposits,
+    /// this is equal to the input mint requested by the trader.
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub mint: Pubkey,
+    /// Timestamp when the request was opened
     pub open_time: i64,
+    /// Timestamp of the last update to the request
     pub update_time: i64,
+    /// The change in position size in USD
     pub size_usd_delta: u64,
+    /// The change in collateral amount
     pub collateral_delta: u64,
+    /// The type of change requested (e.g., increase, decrease)
     pub request_change: RequestChange,
+    /// The type of request (Market for all position requests except for TP/SL requests, which are Trigger)
     pub request_type: RequestType,
+    /// The side of the position (Long or Short)
     pub side: Side,
+    /// Maximum allowed price slippage
     pub price_slippage: Option<u64>,
+    /// Minimum output amount for Jupiter swap
     pub jupiter_minimum_out: Option<u64>,
+    /// Amount to swap before executing the request
     pub pre_swap_amount: Option<u64>,
+    /// Price at which to trigger the request
     pub trigger_price: Option<u64>,
+    /// Whether to trigger above or below the threshold
     pub trigger_above_threshold: Option<bool>,
+    /// Whether the request affects the entire position
     pub entire_position: Option<bool>,
+    /// Whether the request has been executed
     pub executed: bool,
+    /// Counter for tracking request iterations
     pub counter: u64,
+    /// Bump seed for PDA derivation
     pub bump: u8,
+    /// Optional referral public key
     pub referral: Option<Pubkey>,
 }
 
@@ -68,17 +91,12 @@ impl PositionRequest {
         position_pubkey: Pubkey,
         request_change: RequestChange,
     ) -> Result<solana_program::pubkey::Pubkey, solana_program::pubkey::PubkeyError> {
-        let counter = match counter {
-            Some(c) => c,
-            None => {
-                let random_value = rand::thread_rng().gen_range(0..1_000_000_000);
-                random_value as u64
-            }
-        };
+        let counter = counter.unwrap_or_else(|| rand::thread_rng().gen_range(0..1_000_000_000));
 
         let request_change_enum = match request_change {
             RequestChange::Increase => 1u8,
             RequestChange::Decrease => 2u8,
+            _ => unreachable!("RequestChange::None should not be used in create_pda"),
         };
 
         solana_program::pubkey::Pubkey::create_program_address(
@@ -94,18 +112,21 @@ impl PositionRequest {
 
     pub fn find_pda(
         position_pubkey: Pubkey,
-        counter: u64,
+        counter: Option<u64>,
         request_change: RequestChange,
     ) -> (solana_program::pubkey::Pubkey, u8) {
+        let counter = counter.unwrap_or_else(|| rand::thread_rng().gen_range(0..1_000_000_000));
+
         let request_change_enum = match request_change {
             RequestChange::Increase => 1u8,
             RequestChange::Decrease => 2u8,
+            _ => unreachable!("RequestChange::None should not be used in find_pda"),
         };
 
         solana_program::pubkey::Pubkey::find_program_address(
             &[
                 b"position_request",
-                &position_pubkey.as_ref(),
+                position_pubkey.as_ref(),
                 &counter.to_le_bytes(),
                 &[request_change_enum],
             ],
@@ -153,19 +174,4 @@ impl anchor_lang::IdlBuild for PositionRequest {}
 #[cfg(feature = "anchor-idl-build")]
 impl anchor_lang::Discriminator for PositionRequest {
     const DISCRIMINATOR: [u8; 8] = [0; 8];
-}
-
-#[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
-pub enum RequestChange {
-    Increase,
-    Decrease,
-}
-
-impl RequestChange {
-    pub fn to_bytes(&self) -> Vec<u8> {
-        match self {
-            RequestChange::Increase => "increase".as_bytes().to_vec(),
-            RequestChange::Decrease => "decrease".as_bytes().to_vec(),
-        }
-    }
 }
