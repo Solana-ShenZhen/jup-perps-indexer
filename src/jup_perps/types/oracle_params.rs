@@ -5,19 +5,20 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
-use solana_program::pubkey::Pubkey;
 use crate::jup_perps::types::OracleType;
-use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
+use borsh::BorshSerialize;
+use solana_program::pubkey::Pubkey;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct OracleParams {
-#[cfg_attr(feature = "serde", serde(with = "serde_with::As::<serde_with::DisplayFromStr>"))]
-pub oracle_account: Pubkey,
-pub oracle_type: OracleType,
-pub max_price_error: u64,
-pub max_price_age_sec: u32,
+    #[cfg_attr(
+        feature = "serde",
+        serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
+    )]
+    pub oracle_account: Pubkey,
+    pub oracle_type: OracleType,
+    pub max_price_error: u64,
+    pub max_price_age_sec: u32,
 }
-
-

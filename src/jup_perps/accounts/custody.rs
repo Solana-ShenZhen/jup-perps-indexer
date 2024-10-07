@@ -12,40 +12,60 @@ use crate::jup_perps::types::Permissions;
 use crate::jup_perps::types::PricingParams;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
+use solana_program::pubkey;
 use solana_program::pubkey::Pubkey;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Custody {
     pub discriminator: [u8; 8],
+    /// The public key of the associated pool
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub pool: Pubkey,
+    /// The public key of the token mint
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub mint: Pubkey,
+    /// The public key of the token account
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
     )]
     pub token_account: Pubkey,
+    /// The number of decimal places for the token
     pub decimals: u8,
+    /// Whether the token is a stablecoin
     pub is_stable: bool,
+    /// Oracle parameters for price feeds
     pub oracle: OracleParams,
+    /// Parameters for pricing calculations
     pub pricing: PricingParams,
+    /// Permissions for various operations
     pub permissions: Permissions,
+    /// Target ratio in basis points
     pub target_ratio_bps: u64,
+    /// Asset information
     pub assets: Assets,
+    /// State of the funding rate
     pub funding_rate_state: FundingRateState,
+    /// Bump seed for PDA derivation
     pub bump: u8,
+    /// Bump seed for token account PDA derivation
     pub token_account_bump: u8,
 }
 
 impl Custody {
+    pub const SOL_ADDRESS: Pubkey = pubkey!("7xS2gz2bTp3fwCC7knJvUWTEU9Tycczu6VhJYKgi1wdz");
+    pub const ETH_ADDRESS: Pubkey = pubkey!("AQCGyheWPLeo6Qp9WpYS9m3Qj479t7R636N9ey1rEjEn");
+    pub const BTC_ADDRESS: Pubkey = pubkey!("5Pv3gM9JrFFH883SWAhvJC9RPYmo8UNxuFtv5bMMALkm");
+    pub const USDC_ADDRESS: Pubkey = pubkey!("G18jKKXQwBbrHeiK3C9MRXhkHsLHf7XgCSisykV46EZa");
+    pub const USDT_ADDRESS: Pubkey = pubkey!("4vkNeXiYEUizLdrpdPS1eC2mccyM4NUPRtERrk6ZETkk");
+
     #[inline(always)]
     pub fn from_bytes(data: &[u8]) -> Result<Self, std::io::Error> {
         let mut data = data;

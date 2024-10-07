@@ -17,19 +17,29 @@ use solana_program::pubkey::Pubkey;
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Pool {
     pub discriminator: [u8; 8],
+    /// Name of the pool
     pub name: String,
+    /// List of custody account public keys associated with this pool
     #[cfg_attr(
         feature = "serde",
         serde(with = "serde_with::As::<Vec<serde_with::DisplayFromStr>>")
     )]
     pub custodies: Vec<Pubkey>,
+    /// Assets Under Management in USD (represented as a u128)
     pub aum_usd: u128,
+    /// Limit settings for the pool
     pub limit: Limit,
+    /// Fee structure for the pool
     pub fees: Fees,
+    /// Annual Percentage Rate (APR) settings for the pool
     pub pool_apr: PoolApr,
+    /// Maximum time (in seconds) allowed for request execution
     pub max_request_execution_sec: i64,
+    /// Bump seed for PDA derivation
     pub bump: u8,
+    /// Bump seed for LP token PDA derivation
     pub lp_token_bump: u8,
+    /// Timestamp of when the pool was created
     pub inception_time: i64,
 }
 
