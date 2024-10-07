@@ -90,6 +90,7 @@ impl PositionRequest {
         counter: Option<u64>,
         position_pubkey: Pubkey,
         request_change: RequestChange,
+        bump: u8,
     ) -> Result<solana_program::pubkey::Pubkey, solana_program::pubkey::PubkeyError> {
         let counter = counter.unwrap_or_else(|| rand::thread_rng().gen_range(0..1_000_000_000));
 
@@ -105,14 +106,15 @@ impl PositionRequest {
                 position_pubkey.as_ref(),
                 &counter.to_le_bytes(),
                 &[request_change_enum],
+                &[bump],
             ],
             &PERPETUALS_ID,
         )
     }
 
     pub fn find_pda(
-        position_pubkey: Pubkey,
         counter: Option<u64>,
+        position_pubkey: Pubkey,
         request_change: RequestChange,
     ) -> (solana_program::pubkey::Pubkey, u8) {
         let counter = counter.unwrap_or_else(|| rand::thread_rng().gen_range(0..1_000_000_000));

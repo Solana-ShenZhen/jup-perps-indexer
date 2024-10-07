@@ -9,6 +9,7 @@ use crate::jup_perps::types::Permissions;
 use solana_program::pubkey::Pubkey;
 use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
+use solana_program::pubkey;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -26,6 +27,8 @@ pub inception_time: i64,
 
 
 impl Perpetuals {
+  pub const ADDRESS: Pubkey = pubkey!("H4ND9aYttUVLFmNypZqLjZ52FYiGvdEB45GmwNoKEjTj");
+
   #[inline(always)]
   pub fn from_bytes(data: &[u8]) -> Result<Self, std::io::Error> {
     let mut data = data;
