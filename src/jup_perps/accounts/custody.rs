@@ -14,7 +14,6 @@ use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use solana_program::pubkey;
 use solana_program::pubkey::Pubkey;
-use solana_program::pubkey;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -61,15 +60,12 @@ pub struct Custody {
 }
 
 impl Custody {
-<<<<<<< HEAD
     pub const SOL_ADDRESS: Pubkey = pubkey!("7xS2gz2bTp3fwCC7knJvUWTEU9Tycczu6VhJYKgi1wdz");
     pub const ETH_ADDRESS: Pubkey = pubkey!("AQCGyheWPLeo6Qp9WpYS9m3Qj479t7R636N9ey1rEjEn");
     pub const BTC_ADDRESS: Pubkey = pubkey!("5Pv3gM9JrFFH883SWAhvJC9RPYmo8UNxuFtv5bMMALkm");
     pub const USDC_ADDRESS: Pubkey = pubkey!("G18jKKXQwBbrHeiK3C9MRXhkHsLHf7XgCSisykV46EZa");
     pub const USDT_ADDRESS: Pubkey = pubkey!("4vkNeXiYEUizLdrpdPS1eC2mccyM4NUPRtERrk6ZETkk");
-=======
-    pub const ADDRESS: Pubkey = pubkey!("7xS2gz2bTp3fwCC7knJvUWTEU9Tycczu6VhJYKgi1wdz");
->>>>>>> 88eeaa0 (added create_increase_position_market_request)
+
 
     #[inline(always)]
     pub fn from_bytes(data: &[u8]) -> Result<Self, std::io::Error> {

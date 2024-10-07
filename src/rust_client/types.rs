@@ -24,9 +24,9 @@ pub struct OpenPositionArgs {
     pub collateral_custody: Pubkey,
     pub request_change: RequestChange,
     pub input_mint: Pubkey,
-    pub size_usd_delta: String,
-    pub collateral_token_delta: String,
-    pub price_slippage: String,
+    pub size_usd_delta: u64,
+    pub collateral_token_delta: u64,
+    pub price_slippage: u64,
     pub jupiter_minimum_out: String,
     pub counter: Option<u64>,
 }
