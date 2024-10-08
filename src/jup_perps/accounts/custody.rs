@@ -66,7 +66,6 @@ impl Custody {
     pub const USDC_ADDRESS: Pubkey = pubkey!("G18jKKXQwBbrHeiK3C9MRXhkHsLHf7XgCSisykV46EZa");
     pub const USDT_ADDRESS: Pubkey = pubkey!("4vkNeXiYEUizLdrpdPS1eC2mccyM4NUPRtERrk6ZETkk");
 
-
     #[inline(always)]
     pub fn from_bytes(data: &[u8]) -> Result<Self, std::io::Error> {
         let mut data = data;

@@ -12,10 +12,16 @@ use borsh::BorshSerialize;
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct CreateIncreasePositionMarketRequestParams {
+    /// The change in position size in USD
     pub size_usd_delta: u64,
+    /// The change in collateral amount
     pub collateral_token_delta: u64,
+    /// The side of the position (Long or Short)
     pub side: Side,
+    /// The maximum allowed price slippage
     pub price_slippage: u64,
+    /// The minimum amount of tokens to receive from Jupiter swap (if applicable)
     pub jupiter_minimum_out: Option<u64>,
+    /// A counter to ensure uniqueness of the request
     pub counter: u64,
 }

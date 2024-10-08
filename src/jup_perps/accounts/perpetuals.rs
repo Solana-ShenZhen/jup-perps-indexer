@@ -6,38 +6,43 @@
 //!
 
 use crate::jup_perps::types::Permissions;
-use solana_program::pubkey::Pubkey;
-use borsh::BorshSerialize;
 use borsh::BorshDeserialize;
+use borsh::BorshSerialize;
 use solana_program::pubkey;
+use solana_program::pubkey::Pubkey;
 
 #[derive(BorshSerialize, BorshDeserialize, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Perpetuals {
-pub discriminator: [u8; 8],
-pub permissions: Permissions,
-#[cfg_attr(feature = "serde", serde(with = "serde_with::As::<Vec<serde_with::DisplayFromStr>>"))]
-pub pools: Vec<Pubkey>,
-#[cfg_attr(feature = "serde", serde(with = "serde_with::As::<serde_with::DisplayFromStr>"))]
-pub admin: Pubkey,
-pub transfer_authority_bump: u8,
-pub perpetuals_bump: u8,
-pub inception_time: i64,
+    pub discriminator: [u8; 8],
+    pub permissions: Permissions,
+    #[cfg_attr(
+        feature = "serde",
+        serde(with = "serde_with::As::<Vec<serde_with::DisplayFromStr>>")
+    )]
+    pub pools: Vec<Pubkey>,
+    #[cfg_attr(
+        feature = "serde",
+        serde(with = "serde_with::As::<serde_with::DisplayFromStr>")
+    )]
+    pub admin: Pubkey,
+    pub transfer_authority_bump: u8,
+    pub perpetuals_bump: u8,
+    pub inception_time: i64,
 }
 
-
 impl Perpetuals {
-  pub const ADDRESS: Pubkey = pubkey!("H4ND9aYttUVLFmNypZqLjZ52FYiGvdEB45GmwNoKEjTj");
+    pub const ADDRESS: Pubkey = pubkey!("H4ND9aYttUVLFmNypZqLjZ52FYiGvdEB45GmwNoKEjTj");
 
-  #[inline(always)]
-  pub fn from_bytes(data: &[u8]) -> Result<Self, std::io::Error> {
-    let mut data = data;
-    Self::deserialize(&mut data)
-  }
+    #[inline(always)]
+    pub fn from_bytes(data: &[u8]) -> Result<Self, std::io::Error> {
+        let mut data = data;
+        Self::deserialize(&mut data)
+    }
 }
 
 impl<'a> TryFrom<&solana_program::account_info::AccountInfo<'a>> for Perpetuals {
-  type Error = std::io::Error;
+    type Error = std::io::Error;
 
     fn try_from(
         account_info: &solana_program::account_info::AccountInfo<'a>,
@@ -69,5 +74,5 @@ impl anchor_lang::IdlBuild for Perpetuals {}
 
 #[cfg(feature = "anchor-idl-build")]
 impl anchor_lang::Discriminator for Perpetuals {
-  const DISCRIMINATOR: [u8; 8] = [0; 8];
+    const DISCRIMINATOR: [u8; 8] = [0; 8];
 }

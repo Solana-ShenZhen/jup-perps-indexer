@@ -5,43 +5,59 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
+use crate::jup_perps::programs::PERPETUALS_ID;
 use crate::jup_perps::types::CreateIncreasePositionMarketRequestParams;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
-use crate::jup_perps::programs::PERPETUALS_ID;
 
 /// Accounts.
 pub struct CreateIncreasePositionMarketRequest {
+    /// The owner of the position
     pub owner: solana_program::pubkey::Pubkey,
 
+    /// The account funding the position increase
     pub funding_account: solana_program::pubkey::Pubkey,
 
+    /// The perpetuals program account
     pub perpetuals: solana_program::pubkey::Pubkey,
 
+    /// The pool account for the position
     pub pool: solana_program::pubkey::Pubkey,
 
+    /// The position account
     pub position: solana_program::pubkey::Pubkey,
 
+    /// The position request account
     pub position_request: solana_program::pubkey::Pubkey,
 
+    /// The associated token account for the position request
     pub position_request_ata: solana_program::pubkey::Pubkey,
 
+    /// The custody account for the position
     pub custody: solana_program::pubkey::Pubkey,
 
+    /// The collateral custody account
     pub collateral_custody: solana_program::pubkey::Pubkey,
 
+    /// The mint of the input token
     pub input_mint: solana_program::pubkey::Pubkey,
 
+    /// Optional referral account
     pub referral: Option<solana_program::pubkey::Pubkey>,
 
+    /// The token program account
     pub token_program: solana_program::pubkey::Pubkey,
 
+    /// The associated token program account
     pub associated_token_program: solana_program::pubkey::Pubkey,
 
+    /// The system program account
     pub system_program: solana_program::pubkey::Pubkey,
 
+    /// The event authority account
     pub event_authority: solana_program::pubkey::Pubkey,
 
+    /// The program account
     pub program: solana_program::pubkey::Pubkey,
 }
 
