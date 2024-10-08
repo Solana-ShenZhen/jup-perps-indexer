@@ -5,7 +5,6 @@
 // use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 // use url::Url;
 use solana_client::rpc_client::RpcClient;
-use solana_program::pubkey::Pubkey;
 use std::str::FromStr;
 use tokio::time::{sleep, Duration};
 
@@ -108,10 +107,12 @@ use tokio::time::{sleep, Duration};
 //     }
 // }
 
-
 // rpc method
-pub fn get_signatures_for_address(rpc_url: &str, address: &str) -> Result<(), Box<dyn std::error::Error>> {
-
+#[allow(dead_code)]
+pub fn get_signatures_for_address(
+    rpc_url: &str,
+    address: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     let client = RpcClient::new(rpc_url.to_string());
 
     let pubkey = solana_program::pubkey::Pubkey::from_str(address)?;
@@ -128,7 +129,11 @@ pub fn get_signatures_for_address(rpc_url: &str, address: &str) -> Result<(), Bo
 }
 
 // 添加新的公共函数
-pub async fn program_subscribe(url: &str, program_id: &str) -> Result<(), Box<dyn std::error::Error>> {
+#[allow(dead_code)]
+pub async fn program_subscribe(
+    url: &str,
+    program_id: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     get_signatures_for_address(url, program_id)?;
     sleep(Duration::from_secs(5)).await;
     Ok(())

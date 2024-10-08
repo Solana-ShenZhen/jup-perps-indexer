@@ -161,14 +161,14 @@ pub fn create_position_request_account(
     requestargs: FindRequestPdaArgs,
     positionargs: FindPositionPdaArgs,
 ) -> Result<Pubkey, Box<dyn std::error::Error>> {
-    let (position_pda, position_bump) = Position::find_pda(
+    let (position_pda, _position_bump) = Position::find_pda(
         positionargs.custody,
         positionargs.collateral_custody,
         positionargs.owner,
         positionargs.side,
     );
 
-    let (position_request_pda, position_request_bump) = PositionRequest::find_pda(
+    let (_position_request_pda, position_request_bump) = PositionRequest::find_pda(
         Some(requestargs.counter.unwrap().to_string().parse()?),
         position_pda,
         requestargs.request_change,

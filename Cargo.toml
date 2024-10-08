@@ -27,3 +27,8 @@ anchor-spl = "0.30.0"
 solana-rpc-client = "1.18.2"
 dotenv = "0.15.0"
 bs58 = "0.5.1"
+
+[[bin]]
+name = "solana_client"
+path = "src/bin/solana_client.rs"
+
