@@ -116,7 +116,7 @@ impl PositionRequest {
         counter: Option<u64>,
         position_pubkey: Pubkey,
         request_change: RequestChange,
-    ) -> (solana_program::pubkey::Pubkey, u8) {
+    ) -> (solana_program::pubkey::Pubkey, u8, u64) {
         let counter = counter.unwrap_or_else(|| rand::thread_rng().gen_range(0..1_000_000_000));
 
         let request_change_enum = match request_change {
@@ -125,7 +125,7 @@ impl PositionRequest {
             _ => unreachable!("RequestChange::None should not be used in find_pda"),
         };
 
-        solana_program::pubkey::Pubkey::find_program_address(
+        let (pubkey, bump) = solana_program::pubkey::Pubkey::find_program_address(
             &[
                 b"position_request",
                 position_pubkey.as_ref(),
@@ -133,7 +133,9 @@ impl PositionRequest {
                 &[request_change_enum],
             ],
             &PERPETUALS_ID,
-        )
+        );
+
+        (pubkey, bump, counter)
     }
 
     #[inline(always)]

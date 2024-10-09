@@ -5,13 +5,13 @@
 //! <https://github.com/kinobi-so/kinobi>
 //!
 
-pub(crate) mod r#custody;
-pub(crate) mod r#perpetuals;
-pub(crate) mod r#pool;
-pub(crate) mod r#position;
-pub(crate) mod r#position_request;
-pub(crate) mod r#test_oracle;
-pub(crate) mod r#program_accounts;
+pub mod r#custody;
+pub mod r#perpetuals;
+pub mod r#pool;
+pub mod r#position;
+pub mod r#position_request;
+pub mod r#test_oracle;
+pub mod r#program_accounts;
 
 pub use self::r#custody::*;
 pub use self::r#perpetuals::*;

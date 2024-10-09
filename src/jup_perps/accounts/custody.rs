@@ -4,7 +4,6 @@
 //!
 //! <https://github.com/kinobi-so/kinobi>
 //!
-
 use crate::jup_perps::types::Assets;
 use crate::jup_perps::types::FundingRateState;
 use crate::jup_perps::types::OracleParams;

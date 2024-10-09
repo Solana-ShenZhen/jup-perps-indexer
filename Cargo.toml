@@ -27,8 +27,17 @@ anchor-spl = "0.30.0"
 solana-rpc-client = "1.18.2"
 dotenv = "0.15.0"
 bs58 = "0.5.1"
+openssh-keys = "0.6.4"
+
 
 [[bin]]
 name = "solana_client"
 path = "src/bin/solana_client.rs"
 
+[[bin]]
+name = "increase_position_market"
+path = "src/bin/increase_position_market_request.rs"
+
+[[bin]]
+name = "listening_program"
+path = "src/bin/listening_program.rs"
