@@ -7,6 +7,9 @@
 use solana_client::rpc_client::RpcClient;
 use std::str::FromStr;
 use tokio::time::{sleep, Duration};
+use solana_sdk::signature::Signature;
+use solana_transaction_status::UiTransactionEncoding;
+use solana_client::rpc_config::RpcTransactionConfig;
 
 // helius websocket method
 // pub async fn program_subscribe(
@@ -107,6 +110,8 @@ use tokio::time::{sleep, Duration};
 //     }
 // }
 
+
+
 // rpc method
 #[allow(dead_code)]
 pub fn get_signatures_for_address(
@@ -120,6 +125,15 @@ pub fn get_signatures_for_address(
     let signatures = client.get_signatures_for_address(&pubkey)?;
 
     for signature in signatures {
+        let sig = Signature::from_str(&signature.signature)?;
+        let tx_config = RpcTransactionConfig {
+            encoding: Some(UiTransactionEncoding::JsonParsed),
+            commitment: None,
+            max_supported_transaction_version: Some(0),
+        };
+
+        let transaction_details = client.get_transaction_with_config(&sig, tx_config)?;
+        println!("transaction_details: {:#?}", transaction_details);
         println!("signature: {}", signature.signature);
         println!("block: {}", signature.slot);
         println!("------------------------");
@@ -128,7 +142,6 @@ pub fn get_signatures_for_address(
     Ok(())
 }
 
-// 添加新的公共函数
 #[allow(dead_code)]
 pub async fn program_subscribe(
     url: &str,

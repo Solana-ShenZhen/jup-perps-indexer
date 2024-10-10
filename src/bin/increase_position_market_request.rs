@@ -102,6 +102,7 @@ fn get_position_pda(
 ) -> (Pubkey, u8) {
     let (pda, bump) = Position::find_pda(custody, collateral_custody, wallet_address, side);
 
+    #[warn(unused_variables)]
     let created_pda = Position::create_pda(custody, collateral_custody, wallet_address, side, bump)
         .expect("create_failed");
 

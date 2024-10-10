@@ -15,18 +15,20 @@
 //     }
 // }
 use jup_perps_indexer::websocket::program_subscribe::program_subscribe;
+use dotenv::dotenv;
 
 #[tokio::main]
 pub async fn main() {
-    let url = "https://mainnet.helius-rpc.com/?api-key=f46e7c57-a4d4-43b0-b65b-1f287e2380cb";
+    dotenv().ok();
+    let url = dotenv::var("RPC_URL").unwrap();
     let program_id = "PERPHjGBqRHArX4DySjwM6UJHiR3sWAatqfdBS2qQJu";
 
     loop {
-        match program_subscribe(url, program_id).await {
-            Ok(_) => println!("程序订阅成功，继续监听..."),
+        match program_subscribe(&url, program_id).await {
+            Ok(_) => println!("Program subscription successful, continuing to listen..."),
             Err(e) => {
-                eprintln!("程序订阅失败: {}", e);
-                println!("5秒后重试...");
+                eprintln!("Program subscription failed: {}", e);
+                println!("Retrying in 5 seconds...");
                 tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
             }
         }
